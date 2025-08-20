@@ -2,6 +2,7 @@
 name = "ai-ml-portfolio-starter"
 version = "0.1.0"
 description = "Starter with FastAPI + RAG indexer and agentic workflow"
+readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
   "fastapi>=0.112",
@@ -20,6 +21,8 @@ dev = [
   "bandit>=1.7",
   "pip-audit>=2.7",
   "pre-commit>=3.7",
+  "langchain-community>=0.2.0",
+  "langchain-text-splitters>=0.2.0",
 ]
 
 [tool.ruff]
