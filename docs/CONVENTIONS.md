@@ -1,0 +1,4 @@
+- Python 3.11, FastAPI, strict typing, ruff/mypy clean.
+- Module layout: `src/app/*`. Tests mirror paths in `tests/*`.
+- Public functions/classes get docstrings.
+- Prefer pure functions; no hidden I/O in utils.

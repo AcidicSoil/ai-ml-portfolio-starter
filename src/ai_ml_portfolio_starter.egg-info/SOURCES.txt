@@ -1,0 +1,14 @@
+LICENSE
+README.md
+pyproject.toml
+src/ai_ml_portfolio_starter.egg-info/PKG-INFO
+src/ai_ml_portfolio_starter.egg-info/SOURCES.txt
+src/ai_ml_portfolio_starter.egg-info/dependency_links.txt
+src/ai_ml_portfolio_starter.egg-info/requires.txt
+src/ai_ml_portfolio_starter.egg-info/top_level.txt
+src/app/__init__.py
+src/app/embeddings.py
+src/app/main.py
+src/app/retrieve.py
+tests/test_embed.py
+tests/test_health.py
