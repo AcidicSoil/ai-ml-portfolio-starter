@@ -1,8 +1,0 @@
-model: mistral-7b
-quantizations:
-  - fp16
-  - int8
-  - int4
-prompts:
-  - "What is the capital of France?"
-  - "Write a function to reverse a string."

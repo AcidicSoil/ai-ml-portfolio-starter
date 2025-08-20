@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentic Workflow Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .console-output::before {
+            content: '$ ';
+            color: #9ca3af;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 lg:p-8">
+
+    <div class="w-full max-w-4xl bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
+        <div class="p-6 border-b border-gray-700">
+            <h1 class="text-2xl font-bold text-white">Agentic Development Workflow Simulator</h1>
+            <p class="mt-2 text-gray-400">This simulates a program that guides an LLM through a structured coding process. Click "Run Workflow" to see it in action.</p>
+        </div>
+
+        <div class="p-6">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                <div class="mb-4 sm:mb-0">
+                    <label for="user-goal" class="text-sm font-medium text-gray-300">User Goal:</label>
+                    <p id="user-goal" class="mt-1 text-lg text-cyan-400 bg-gray-700/50 rounded-md px-3 py-1">"Add a function `add(a, b)` and a test for it."</p>
+                </div>
+                <button id="run-button" class="w-full sm:w-auto bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-6 rounded-lg transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-cyan-500/50">
+                    Run Workflow
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-black h-96 p-6 overflow-y-auto font-mono text-sm">
+            <div id="console-output">
+                <p class="text-gray-500">Console output will appear here...</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // This is a self-contained simulator.
+        // In a real application, these would be separate, well-tested modules.
+
+        // --- Mock File System ---
+        // We'll simulate a file system in memory to avoid writing to disk.
+        const VIRTUAL_FILE_SYSTEM = {};
+
+        // --- Schemas (Data Contracts for LLM) ---
+        // These classes define the expected structure of the LLM's output.
+        // In a real Python app, you'd use a library like Pydantic.
+        class Task {
+            constructor(description, files_to_edit, test_command) {
+                this.description = description;
+                this.files_to_edit = files_to_edit;
+                this.test_command = test_command;
+            }
+        }
+
+        class Plan {
+            constructor(summary, tasks_to_execute) {
+                this.summary = summary;
+                this.tasks = tasks_to_execute;
+            }
+        }
+
+        // --- Toolbelt (Safe access to the "real world") ---
+        const toolbelt = {
+            listFiles: () => {
+                return Object.keys(VIRTUAL_FILE_SYSTEM).join('\n') || 'No files exist yet.';
+            },
+            writeFile: (path, content) => {
+                logToConsole(`TOOL: Writing ${content.length} bytes to ${path}`);
+                VIRTUAL_FILE_SYSTEM[path] = content;
+                return `Successfully wrote to ${path}`;
+            },
+            readFile: (path) => {
+                logToConsole(`TOOL: Reading file ${path}`);
+                return VIRTUAL_FILE_SYSTEM[path];
+            },
+            runTests: (command) => {
+                logToConsole(`TOOL: Running test command: "${command}"`);
+                if (command === 'pytest') {
+                    const testFileContent = VIRTUAL_FILE_SYSTEM['tests/test_main.py'];
+                    const mainFileContent = VIRTUAL_FILE_SYSTEM['src/main.py'];
+
+                    // Super simplified test runner simulation
+                    if (!mainFileContent || !testFileContent) {
+                        return { passed: false, error: "Error: Source or test file not found." };
+                    }
+                    if (mainFileContent.includes('def add(a, b):') && mainFileContent.includes('return a + b')) {
+                         if (testFileContent.includes('assert add(2, 3) == 5')) {
+                            return { passed: true, error: null };
+                         }
+                    }
+                    return { passed: false, error: "AssertionError: Test failed. `add(2, 3)` did not return 5." };
+                }
+                return { passed: false, error: "Unknown test command." };
+            }
+        };
+
+        // --- Agent Personas (Mock LLM Calls) ---
+        // These functions simulate calls to a large language model.
+        // Notice how they return a JSON string that matches our schemas.
+        const agents = {
+            callArchitectAgent: (goal, repoMap) => {
+                logToConsole("AGENT: Calling Architect to create a plan...");
+                const planJson = {
+                    summary: "Create a new function `add` in `main.py` and a corresponding test in `test_main.py`.",
+                    tasks_to_execute: [
+                        {
+                            description: "Implement the `add(a, b)` function in `src/main.py`.",
+                            files_to_edit: ["src/main.py"],
+                            test_command: "pytest"
+                        },
+                        {
+                            description: "Write a test for the `add` function in `tests/test_main.py`.",
+                            files_to_edit: ["tests/test_main.py", "src/main.py"],
+                            test_command: "pytest"
+                        }
+                    ]
+                };
+                return JSON.stringify(planJson, null, 2);
+            },
+            callImplementerAgent: (task, fileContents, lastError) => {
+                logToConsole(`AGENT: Calling Implementer for task: "${task.description}"`);
+                if (lastError) {
+                    logToConsole(`AGENT: Providing error context for self-correction: ${lastError}`);
+                }
+
+                // Simulate self-correction. If there was an error, the "LLM" provides the correct code.
+                if (task.description.includes('Implement the `add`') && lastError) {
+                     return JSON.stringify({
+                        file_path: "src/main.py",
+                        thought: "The previous attempt failed. The function was missing the implementation. I will add the correct return statement.",
+                        code: "def add(a, b):\n    return a + b"
+                    });
+                }
+
+                // First attempt for implementing the function (intentionally incorrect)
+                if (task.description.includes('Implement the `add`')) {
+                    return JSON.stringify({
+                        file_path: "src/main.py",
+                        thought: "I will create the function signature as requested in `src/main.py`.",
+                        code: "def add(a, b):\n    pass" // Intentionally incomplete for demonstration
+                    });
+                }
+
+                // Code for the test file
+                if (task.description.includes('Write a test')) {
+                    return JSON.stringify({
+                        file_path: "tests/test_main.py",
+                        thought: "I will write a test case for the `add` function to ensure it works correctly.",
+                        code: "from src.main import add\n\ndef test_add():\n    assert add(2, 3) == 5"
+                    });
+                }
+            }
+        };
+
+        // --- Main Orchestrator Logic ---
+        const consoleOutput = document.getElementById('console-output');
+        const runButton = document.getElementById('run-button');
+        let logBuffer = [];
+
+        function logToConsole(message) {
+            console.log(message);
+            const p = document.createElement('p');
+            p.className = 'console-output';
+            p.textContent = message;
+            logBuffer.push(p);
+        }
+
+        function renderLog() {
+            logBuffer.forEach(p => consoleOutput.appendChild(p));
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+            logBuffer = [];
+        }
+
+        async function orchestrate() {
+            runButton.disabled = true;
+            runButton.textContent = "Running...";
+            consoleOutput.innerHTML = '';
+
+            // 1. INITIALIZATION
+            logToConsole("ORCHESTRATOR: Starting workflow...");
+            const userGoal = "Add a function `add(a, b)` and a test for it.";
+            Object.keys(VIRTUAL_FILE_SYSTEM).forEach(key => delete VIRTUAL_FILE_SYSTEM[key]);
+            await new Promise(r => setTimeout(r, 500));
+            renderLog();
+
+            // 2. SCAFFOLDING
+            logToConsole("ORCHESTRATOR: Scaffolding initial project structure...");
+            toolbelt.writeFile('src/main.py', '# Main application file');
+            toolbelt.writeFile('tests/test_main.py', '# Test file for main');
+            await new Promise(r => setTimeout(r, 500));
+            renderLog();
+
+            // 3. ARCHITECTURE PHASE
+            const repoMap = toolbelt.listFiles();
+            logToConsole(`ORCHESTRATOR: Current repo map:\n${repoMap}`);
+            const planJsonString = agents.callArchitectAgent(userGoal, repoMap);
+            const planData = JSON.parse(planJsonString);
+            const plan = new Plan(planData.summary, planData.tasks_to_execute.map(t => new Task(t.description, t.files_to_edit, t.test_command)));
+            logToConsole(`ORCHESTRATOR: Plan received:\n${JSON.stringify(plan, null, 2)}`);
+            await new Promise(r => setTimeout(r, 1000));
+            renderLog();
+
+            // 4. IMPLEMENTATION & TEST LOOP
+            for (const task of plan.tasks) {
+                logToConsole(`ORCHESTRATOR: Starting task -> ${task.description}`);
+                let lastError = null;
+                let attempts = 0;
+                const maxAttempts = 2;
+
+                while (attempts < maxAttempts) {
+                    attempts++;
+                    logToConsole(`ORCHESTRATOR: Attempt ${attempts}/${maxAttempts}...`);
+
+                    const fileContents = task.files_to_edit.reduce((acc, path) => {
+                        acc[path] = toolbelt.readFile(path);
+                        return acc;
+                    }, {});
+
+                    const implementationJsonString = agents.callImplementerAgent(task, fileContents, lastError);
+                    const implementation = JSON.parse(implementationJsonString);
+
+                    toolbelt.writeFile(implementation.file_path, implementation.code);
+
+                    const testResult = toolbelt.runTests(task.test_command);
+
+                    if (testResult.passed) {
+                        logToConsole(`ORCHESTRATOR: ✅ Tests passed for task!`);
+                        lastError = null;
+                        break; // Success, move to next task
+                    } else {
+                        logToConsole(`ORCHESTRATOR: ❌ Tests failed: ${testResult.error}`);
+                        lastError = testResult.error;
+                    }
+                    await new Promise(r => setTimeout(r, 1000));
+                    renderLog();
+                }
+
+                if (lastError) {
+                    logToConsole("ORCHESTRATOR: ❌ Task failed after multiple attempts. Halting workflow.");
+                    runButton.disabled = false;
+                    runButton.textContent = "Run Workflow";
+                    renderLog();
+                    return;
+                }
+                await new Promise(r => setTimeout(r, 500));
+                renderLog();
+            }
+
+            logToConsole("🚀 ORCHESTRATOR: Workflow completed successfully!");
+            logToConsole("Final file contents:");
+            logToConsole(`--- src/main.py ---\n${toolbelt.readFile('src/main.py')}`);
+            logToConsole(`--- tests/test_main.py ---\n${toolbelt.readFile('tests/test_main.py')}`);
+
+            runButton.disabled = false;
+            runButton.textContent = "Run Workflow";
+            renderLog();
+        }
+
+        runButton.addEventListener('click', orchestrate);
+
+    </script>
+</body>
+</html>

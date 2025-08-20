@@ -11,3 +11,6 @@ checkpoints/
 .pytest_cache/
 results/*.csv
 results/*.json
+
+
+.archive/

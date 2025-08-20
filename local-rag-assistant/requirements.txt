@@ -1,6 +1,0 @@
-fastapi
-uvicorn
-chromadb
-faiss-cpu
-sentence-transformers
-pydantic
