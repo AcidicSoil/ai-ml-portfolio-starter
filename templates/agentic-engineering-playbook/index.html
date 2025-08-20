@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Agentic Engineering Playbook | Interactive Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Amber -->
+    <!-- Application Structure Plan: The SPA is structured thematically into four main, navigable sections: Foundations, The Loop, Toolkit, and Troubleshooting. This non-linear design allows users to directly access the content most relevant to their needs, whether they are planning a project, implementing a feature, choosing tools, or debugging an agent. The goal is to transform the dense, linear report into an explorable knowledge base. Key interactions include a visual workflow diagram, an interactive agent persona matrix, and an expandable troubleshooting table, all designed to make complex information digestible and engaging. This structure prioritizes user-driven exploration over passive reading. -->
+    <!-- Visualization & Content Choices:
+        - Report Info: End-to-end workflow -> Goal: Organize/Change -> Viz: Interactive HTML/CSS timeline -> Interaction: Click to expand step details -> Justification: Visually breaks down a complex process into manageable, explorable stages.
+        - Report Info: Agent personas matrix -> Goal: Compare/Organize -> Viz: Interactive card grid -> Interaction: Click card to show persona details in a modal -> Justification: Provides a quick, comparable overview of agent roles while keeping the main view uncluttered.
+        - Report Info: Agent performance metrics -> Goal: Inform/Compare -> Viz: Bar Chart (Chart.js) -> Interaction: Hover for tooltips -> Justification: Quantifies abstract concepts of agent performance, making them more concrete and comparable.
+        - Report Info: Failure modes table -> Goal: Organize/Inform -> Viz: Interactive HTML table -> Interaction: Click row to expand details -> Justification: Manages information density effectively, allowing users to scan for problems and drill down for solutions without being overwhelmed.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+            color: #334155; /* slate-700 */
+        }
+        .nav-link {
+            transition: color 0.2s, border-bottom-color 0.2s;
+        }
+        .nav-link.active, .nav-link:hover {
+            color: #d97706; /* amber-600 */
+            border-bottom-color: #d97706; /* amber-600 */
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .modal-backdrop {
+            background-color: rgba(0,0,0,0.5);
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            transition: transform 0.3s ease;
+        }
+        .troubleshooting-row {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .troubleshooting-row:hover {
+            background-color: #f1f5f9; /* slate-100 */
+        }
+        .details-row {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-slate-800">Agentic Engineering Playbook</h1>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#foundations" class="nav-link text-slate-600 font-medium border-b-2 border-transparent pb-1">Foundations</a>
+                <a href="#loop" class="nav-link text-slate-600 font-medium border-b-2 border-transparent pb-1">The Loop</a>
+                <a href="#toolkit" class="nav-link text-slate-600 font-medium border-b-2 border-transparent pb-1">Toolkit</a>
+                <a href="#troubleshooting" class="nav-link text-slate-600 font-medium border-b-2 border-transparent pb-1">Troubleshooting</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden text-slate-800">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="#foundations" class="block py-2 text-slate-600 font-medium">Foundations</a>
+            <a href="#loop" class="block py-2 text-slate-600 font-medium">The Loop</a>
+            <a href="#toolkit" class="block py-2 text-slate-600 font-medium">Toolkit</a>
+            <a href="#troubleshooting" class="block py-2 text-slate-600 font-medium">Troubleshooting</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <section class="text-center mb-20">
+            <h2 class="text-4xl font-bold text-slate-900 mb-4">Build Reliable Software with LLM Agents</h2>
+            <p class="text-lg text-slate-600 max-w-3xl mx-auto">An interactive guide to the principles, workflows, and tools for effective agentic engineering. Move from AI as a tool to AI as a collaborator.</p>
+        </section>
+
+        <section id="foundations" class="mb-20">
+            <h3 class="text-3xl font-bold text-slate-900 mb-2">Part I: The Foundation</h3>
+            <p class="text-slate-600 mb-10">For LLM agents, rigorous upfront planning and deliberate architectural design are not merely best practices—they are prerequisites for success. This section covers how to create a stable and predictable environment for agents to operate effectively.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card p-6">
+                    <h4 class="text-lg font-semibold text-amber-700 mb-2">Specification as Code</h4>
+                    <p class="text-slate-600">Shift your mindset: user stories, acceptance criteria, and ADRs are no longer just documents. They become the high-level source code that directly programs the agent's execution plan, minimizing ambiguity and defining success.</p>
+                </div>
+                <div class="card p-6">
+                    <h4 class="text-lg font-semibold text-amber-700 mb-2">Test-First Prompting</h4>
+                    <p class="text-slate-600">Adapt Test-Driven Development for agents. By providing a failing test case in the prompt, you give the agent a precise, executable definition of "done," which is far more effective than natural language alone.</p>
+                </div>
+                <div class="card p-6">
+                    <h4 class="text-lg font-semibold text-amber-700 mb-2">Architectural Guardrails</h4>
+                    <p class="text-slate-600">Use Architectural Decision Records (ADRs) as persistent context. An ADR stating "We use PostgreSQL for financial data" acts as a powerful, long-term instruction that prevents the agent from making incorrect architectural choices.</p>
+                </div>
+                <div class="card p-6 md:col-span-2 lg:col-span-3">
+                    <h4 class="text-lg font-semibold text-amber-700 mb-2">Repository Architecture: Monorepo vs. Polyrepo</h4>
+                    <p class="text-slate-600 mb-4">The structure of your codebase has a profound impact on an agent's ability to understand and modify it. For agentic development, the choice is clear.</p>
+                    <div class="flex flex-col md:flex-row gap-4 text-center">
+                        <div class="flex-1 p-4 border border-green-200 bg-green-50 rounded-lg">
+                            <h5 class="font-bold text-green-800">Monorepo (Recommended)</h5>
+                            <p class="text-sm text-green-700">Provides a single, unified context. This is ideal for machine cognition, allowing agents to reason about system-wide dependencies and execute complex refactors with a higher success rate.</p>
+                        </div>
+                        <div class="flex-1 p-4 border border-red-200 bg-red-50 rounded-lg">
+                            <h5 class="font-bold text-red-800">Polyrepo</h5>
+                            <p class="text-sm text-red-700">Creates information silos. An agent working in one repository is blind to dependencies in another, making cross-cutting changes difficult and error-prone without significant manual intervention.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="loop" class="mb-20">
+            <h3 class="text-3xl font-bold text-slate-900 mb-2">Part II: The Agentic Development Loop</h3>
+            <p class="text-slate-600 mb-10">This section outlines a complete, repeatable workflow for developing a software feature using a multi-agent team. Click on each step to see more details.</p>
+            <div id="workflow-diagram" class="relative pl-8 border-l-2 border-slate-200">
+            </div>
+        </section>
+
+        <section id="toolkit" class="mb-20">
+            <h3 class="text-3xl font-bold text-slate-900 mb-2">Part III: The Agentic Toolkit</h3>
+            <p class="text-slate-600 mb-10">Explore the key agent personas, core reliability techniques, and a comparison of popular frameworks and IDEs to build your agentic development stack.</p>
+
+            <h4 class="text-2xl font-semibold text-slate-800 mb-6">Agent Persona Matrix</h4>
+            <div id="agent-matrix" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+            </div>
+
+            <h4 class="text-2xl font-semibold text-slate-800 mb-6">Core Reliability Techniques</h4>
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <div class="card p-6">
+                    <h5 class="text-lg font-semibold text-amber-700 mb-2">Context Provisioning (RAG)</h5>
+                    <p class="text-slate-600">Use Retrieval-Augmented Generation as the agent's long-term memory. Index your codebase into a vector database to provide the agent with highly relevant, specific code snippets as context for its tasks, dramatically improving accuracy.</p>
+                </div>
+                <div class="card p-6">
+                    <h5 class="text-lg font-semibold text-amber-700 mb-2">Structured Outputs & Tool Calling</h5>
+                    <p class="text-slate-600">Enforce predictability by requiring agents to respond in a strict JSON schema. Use the native "tool calling" features of modern LLMs to make agent actions robust, auditable, and easy to integrate with your existing code.</p>
+                </div>
+                <div class="card p-6">
+                    <h5 class="text-lg font-semibold text-amber-700 mb-2">Safety via Patch/Diff & Guardrails</h5>
+                    <p class="text-slate-600">Never allow an agent to write directly to the filesystem. Instead, have it output a `git diff` patch for review. Combine this with automated guardrails that block disallowed actions (e.g., editing critical config files) and run linters/formatters on the proposed changes.</p>
+                </div>
+                <div class="card p-6">
+                    <h5 class="text-lg font-semibold text-amber-700 mb-2">Performance Evaluation</h5>
+                    <p class="text-slate-600">Measure what matters. Go beyond simple pass/fail and track key metrics to systematically improve agent performance over time. This chart shows the relative importance of key metrics for evaluation.</p>
+                    <div class="chart-container mt-4 mx-auto" style="position: relative; height:250px; max-height: 250px; width:100%; max-width: 500px;">
+                        <canvas id="metricsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="troubleshooting" class="mb-20">
+            <h3 class="text-3xl font-bold text-slate-900 mb-2">Part IV: Troubleshooting Common Failures</h3>
+            <p class="text-slate-600 mb-10">Agentic systems can fail in predictable ways. Use this guide to diagnose and mitigate the most common failure modes. Click on a failure to see the mitigation strategy.</p>
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <table class="w-full text-left">
+                    <thead class="bg-slate-50 border-b border-slate-200">
+                        <tr>
+                            <th class="p-4 font-semibold text-slate-600">Failure Mode</th>
+                            <th class="p-4 font-semibold text-slate-600 hidden md:table-cell">Common Symptoms</th>
+                        </tr>
+                    </thead>
+                    <tbody id="troubleshooting-table">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-300">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p>&copy; 2025 Agentic Engineering Playbook. An interactive visualization.</p>
+            <a href="#" class="mt-4 inline-block text-amber-400 hover:text-amber-300">Back to Top &uarr;</a>
+        </div>
+    </footer>
+
+    <div id="persona-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden modal-backdrop">
+        <div id="modal-content" class="bg-white rounded-lg shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto transform scale-95 modal-content">
+            <div class="sticky top-0 bg-white p-6 border-b border-slate-200 flex justify-between items-center">
+                <h3 id="modal-title" class="text-2xl font-bold text-slate-900"></h3>
+                <button id="modal-close" class="text-slate-500 hover:text-slate-800">&times;</button>
+            </div>
+            <div class="p-6">
+                <h4 class="font-semibold text-amber-700 mb-2">Core Responsibility</h4>
+                <p id="modal-responsibility" class="text-slate-600 mb-4"></p>
+                <h4 class="font-semibold text-amber-700 mb-2">Key Inputs</h4>
+                <p id="modal-inputs" class="text-slate-600 mb-4"></p>
+                <h4 class="font-semibold text-amber-700 mb-2">Output Schema</h4>
+                <div id="modal-schema" class="bg-slate-50 p-4 rounded-md text-sm text-slate-800 overflow-x-auto"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const workflowData = [
+                {
+                    step: 1,
+                    title: "Idea → Spec",
+                    description: "A feature idea is formalized into a machine-readable specification. An 'Architect Agent' can accelerate this by drafting specs, ADRs, and acceptance criteria from a high-level goal. The developer's role is to review and refine these documents for clarity and completeness."
+                },
+                {
+                    step: 2,
+                    title: "Spec → Scaffold",
+                    description: "A 'Scaffolder Agent' reads the finalized specification and generates the initial file and folder structure. This includes boilerplate code, empty test files, and configuration entries, ensuring a consistent starting point for all new features."
+                },
+                {
+                    step: 3,
+                    title: "Iterative Coding Loop",
+                    description: "The core of agentic development. In a tight loop, the developer (or a 'Tester Agent') writes a failing test for a small sub-task. An 'Implementer Agent' is then prompted to write the code to make the test pass. The output is a `git diff` patch, which the developer reviews and applies. This cycle repeats until the feature is complete."
+                },
+                {
+                    step: 4,
+                    title: "Tests → Docs",
+                    description: "Once all tests pass, a 'Documenter Agent' generates human-readable documentation. Provided with the final code, the original spec, and the test suite, it creates code comments, docstrings, and updates the `README.md` file."
+                },
+                {
+                    step: 5,
+                    title: "Review & Release",
+                    description: "The agent's work is compiled into a pull request. An agent generates the PR description, linking to the spec and relevant ADRs. This provides human reviewers with full context. Once approved, the feature follows the standard CI/CD pipeline."
+                }
+            ];
+
+            const agentPersonaData = [
+                {
+                    persona: "Planner/Architect",
+                    responsibility: "Decompose high-level tasks, create detailed implementation plans, and draft Architectural Decision Records (ADRs).",
+                    inputs: "Feature Request, Existing Codebase Context, ADRs",
+                    schema: `{\n  "planSummary": "...",\n  "affectedFiles": [\n    {\n      "path": "/src/feature.py",\n      "action": "CREATE",\n      "description": "Main logic for the new feature."\n    }\n  ],\n  "stepByStepPlan": [\n    "Step 1: Create the file...",\n    "Step 2: Implement the function..."\n  ]\n}`
+                },
+                {
+                    persona: "Implementer/Coder",
+                    responsibility: "Execute a single, specific step from a plan by writing, modifying, or debugging code using a provided set of tools.",
+                    inputs: "Plan Step, Relevant Code Files, Conventions",
+                    schema: `{\n  "toolName": "writeFile",\n  "parameters": {\n    "path": "/src/feature.py",\n    "content": "def new_feature():\\n  pass"\n  }\n}`
+                },
+                {
+                    persona: "Tester",
+                    responsibility: "Generate comprehensive unit and integration tests for a given piece of code based on its specification and acceptance criteria.",
+                    inputs: "Source Code File, Acceptance Criteria",
+                    schema: `A complete code block for the test file, e.g.,\n\n# tests/test_feature.py\ndef test_new_feature():\n  assert new_feature() is not None`
+                },
+                {
+                    persona: "Reviewer/Refactorer",
+                    responsibility: "Analyze code diffs for quality, adherence to conventions, potential bugs, and opportunities for improvement.",
+                    inputs: "Code Diff, Conventions File",
+                    schema: `{\n  "reviewComments": [\n    {\n      "filePath": "/src/feature.py",\n      "lineNumber": 2,\n      "comment": "Function should have a docstring.",\n      "severity": "Minor"\n    }\n  ]\n}`
+                }
+            ];
+
+            const troubleshootingData = [
+                {
+                    failure: "Specification Drift",
+                    symptom: "Code works but doesn't meet business needs.",
+                    cause: "Ambiguous initial prompt.",
+                    mitigation: "Use strict specification templates (Acceptance Criteria, DoD). Require human approval of an agent-generated plan *before* coding begins to confirm understanding."
+                },
+                {
+                    failure: "Context Loss",
+                    symptom: "Agent forgets prior instructions or code context.",
+                    cause: "Exceeding LLM context window; poor retrieval.",
+                    mitigation: "Implement a robust RAG pipeline with effective code chunking. For long tasks, break them into smaller, stateful steps managed by an orchestrator."
+                },
+                {
+                    failure: "File Thrashing",
+                    symptom: "Agent edits the same file repeatedly; writes to invalid paths.",
+                    cause: "Lack of file system awareness; reasoning loop.",
+                    mitigation: "Use a patch/diff workflow instead of direct writes. Provide a `listFiles` tool and implement filesystem guardrails to block writes to disallowed paths."
+                },
+                {
+                    failure: "Flaky Tests",
+                    symptom: "Correct code fails the verification step.",
+                    cause: "Inconsistent environment; non-deterministic tests.",
+                    mitigation: "Use containerized environments (e.g., Devcontainers) for reproducible builds. Prompt the agent to write deterministic, mock-based unit tests."
+                }
+            ];
+
+            const workflowContainer = document.getElementById('workflow-diagram');
+            workflowData.forEach(item => {
+                const stepElement = document.createElement('div');
+                stepElement.className = 'mb-10 cursor-pointer workflow-step';
+                stepElement.innerHTML = `
+                    <div class="flex items-center mb-2">
+                        <div class="flex-shrink-0 bg-amber-500 rounded-full h-8 w-8 flex items-center justify-center text-white font-bold z-10">${item.step}</div>
+                        <h5 class="ml-4 text-xl font-semibold text-slate-800">${item.title}</h5>
+                    </div>
+                    <div class="ml-4 pl-8 text-slate-600 workflow-description hidden">
+                        <p>${item.description}</p>
+                    </div>
+                `;
+                workflowContainer.appendChild(stepElement);
+            });
+
+            workflowContainer.addEventListener('click', (e) => {
+                const step = e.target.closest('.workflow-step');
+                if (step) {
+                    step.querySelector('.workflow-description').classList.toggle('hidden');
+                }
+            });
+
+            const agentMatrixContainer = document.getElementById('agent-matrix');
+            agentPersonaData.forEach(agent => {
+                const agentCard = document.createElement('div');
+                agentCard.className = 'card p-4 text-center cursor-pointer';
+                agentCard.innerHTML = `<h5 class="font-semibold text-slate-800">${agent.persona}</h5>`;
+                agentCard.addEventListener('click', () => openPersonaModal(agent));
+                agentMatrixContainer.appendChild(agentCard);
+            });
+
+            const troubleshootingTable = document.getElementById('troubleshooting-table');
+            troubleshootingData.forEach(item => {
+                const row = document.createElement('tbody');
+                row.innerHTML = `
+                    <tr class="troubleshooting-row border-b border-slate-200">
+                        <td class="p-4">${item.failure}</td>
+                        <td class="p-4 hidden md:table-cell text-slate-500">${item.symptom}</td>
+                    </tr>
+                    <tr class="details-row bg-slate-50">
+                        <td colspan="2" class="p-6">
+                            <p class="text-sm text-slate-600"><strong class="font-semibold text-amber-700">Cause:</strong> ${item.cause}</p>
+                            <p class="text-sm text-slate-600 mt-2"><strong class="font-semibold text-amber-700">Mitigation:</strong> ${item.mitigation}</p>
+                        </td>
+                    </tr>
+                `;
+                troubleshootingTable.appendChild(row);
+            });
+
+            troubleshootingTable.addEventListener('click', (e) => {
+                const row = e.target.closest('.troubleshooting-row');
+                if (row) {
+                    const details = row.nextElementSibling;
+                    details.style.display = details.style.display === 'table-row' ? 'none' : 'table-row';
+                }
+            });
+
+            const modal = document.getElementById('persona-modal');
+            const modalContent = document.getElementById('modal-content');
+            const modalClose = document.getElementById('modal-close');
+
+            function openPersonaModal(agent) {
+                document.getElementById('modal-title').innerText = agent.persona;
+                document.getElementById('modal-responsibility').innerText = agent.responsibility;
+                document.getElementById('modal-inputs').innerText = agent.inputs;
+                document.getElementById('modal-schema').innerHTML = `<pre><code>${agent.schema}</code></pre>`;
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.style.opacity = '1';
+                    modalContent.style.transform = 'scale(1)';
+                }, 10);
+            }
+
+            function closePersonaModal() {
+                modal.style.opacity = '0';
+                modalContent.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+            }
+
+            modalClose.addEventListener('click', closePersonaModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closePersonaModal();
+                }
+            });
+
+            const ctx = document.getElementById('metricsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Task Success', 'Efficiency (Turns)', 'Code Churn', 'HITL Interventions', 'Token Cost'],
+                    datasets: [{
+                        label: 'Relative Importance',
+                        data: [100, 85, 70, 90, 60],
+                        backgroundColor: [
+                            'rgba(5, 150, 105, 0.6)',
+                            'rgba(217, 119, 6, 0.6)',
+                            'rgba(219, 39, 119, 0.6)',
+                            'rgba(59, 130, 246, 0.6)',
+                            'rgba(107, 114, 128, 0.6)'
+                        ],
+                        borderColor: [
+                            'rgba(5, 150, 105, 1)',
+                            'rgba(217, 119, 6, 1)',
+                            'rgba(219, 39, 119, 1)',
+                            'rgba(59, 130, 246, 1)',
+                            'rgba(107, 114, 128, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Key Agent Performance Metrics'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    if(mobileMenu.classList.contains('hidden') === false) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

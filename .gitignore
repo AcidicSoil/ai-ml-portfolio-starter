@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.env
+.envrc
+data/
+checkpoints/
+.DS_Store
+
+# Common local dev
+.venv/
+.pytest_cache/
+results/*.csv
+results/*.json

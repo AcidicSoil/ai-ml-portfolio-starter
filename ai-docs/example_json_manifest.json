@@ -1,0 +1,18 @@
+{
+  "repo": "project-name",
+  "owners": ["@team/ai"],
+  "tools": {"llm":"gpt-4o","embedding":"text-embedding-3-large"},
+  "structure": [
+    {"path":"README.md","purpose":"overview"},
+    {"path":"docs/adr/0001-record-architecture-decisions.md","purpose":"ADRs"},
+    {"path":"prompts/SYSTEM.md","purpose":"system guardrails"},
+    {"path":"src/","purpose":"application code"},
+    {"path":"tests/","purpose":"test suites"},
+    {"path":".github/pull_request_template.md","purpose":"PR checks"}
+  ],
+  "policies": {
+    "commit":"conventional-commits",
+    "coverage": {"min": 0.85, "mutation_min": 0.25}
+  },
+  "provenance": {"generated_by":"LLM","llm_version":"x.y","timestamp":"<iso>"}
+}

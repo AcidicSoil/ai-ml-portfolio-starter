@@ -1,0 +1,1 @@
+This directory contains evaluation scripts, such as the `run_evals.py` script that is executed by the CI pipeline.
