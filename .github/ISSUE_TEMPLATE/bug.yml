@@ -1,0 +1,61 @@
+name: Bug report
+description: Report a bug or regression
+title: "[Bug]: "
+labels: ["type:bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug!
+        Please include as much detail as possible so we can reproduce it.
+  - type: input
+    id: env
+    attributes:
+      label: Environment
+      description: OS, runtime, versions (e.g. Python 3.11, Node 20, etc.)
+      placeholder: "macOS 14.5, Python 3.11, uv 0.1.17"
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Exact steps so we can see the bug ourselves.
+      placeholder: |
+        1. Run `make run`
+        2. Call `/embed` with input X
+        3. See error message
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What you thought should happen.
+      placeholder: "API should return 200 OK with JSON payload"
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What actually happened.
+      placeholder: "Got 500 Internal Server Error"
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / screenshots
+      description: Any error output, stack traces, or screenshots that help.
+      render: shell
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How bad is this bug?
+      options:
+        - Low (cosmetic / minor)
+        - Medium (workaround possible)
+        - High (blocks development)
+        - Critical (blocks release / production)
+    validations:
+      required: true

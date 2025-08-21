@@ -1,0 +1,8 @@
+name: Feature request
+labels: ["type:feature"]
+body:
+  - type: textarea
+    id: ac
+    attributes:
+      label: Acceptance Criteria
+      description: What must be true for this to be done?
