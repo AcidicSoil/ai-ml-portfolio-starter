@@ -3,6 +3,11 @@
 =======================
 
 [![CI](https://github.com/AcidicSoil/ai-ml-portfolio-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/AcidicSoil/ai-ml-portfolio-starter/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.11-blue.svg)](https://www.python.org/)
+[![Coverage Status](https://coveralls.io/repos/github/AcidicSoil/ai-ml-portfolio-starter/badge.svg?branch=main)](https://coveralls.io/github/AcidicSoil/ai-ml-portfolio-starter?branch=main)
+[![Open Issues](https://img.shields.io/github/issues/AcidicSoil/ai-ml-portfolio-starter)](https://github.com/AcidicSoil/ai-ml-portfolio-starter/issues)
+[![Last Commit](https://img.shields.io/github/last-commit/AcidicSoil/ai-ml-portfolio-starter)](https://github.com/AcidicSoil/ai-ml-portfolio-starter/commits/main)
 
 FastAPI app + lightweight RAG tooling and an agentic workflow scaffold. Clean tests, pre-commit, and simple scripts help
 you iterate quickly.
