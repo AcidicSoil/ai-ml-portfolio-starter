@@ -25,3 +25,5 @@ codefetch/
 !.agent/.keep
 *.patch
 scripts/session_*.log
+
+node_modules/

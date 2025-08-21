@@ -1,0 +1,17 @@
+{
+  "scripts": {
+    "fmt": "prettier --write .",
+    "type": "module",
+    "fmt:check": "prettier --check .",
+    "lint:md": "markdownlint \"**/*.{md,markdown}\"",
+    "lint": "npm run fmt:check && npm run lint:md",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.5",
+    "markdownlint": "^0.38.0",
+    "markdownlint-cli": "^0.45.0",
+    "prettier": "^3.6.2"
+  }
+}

@@ -1,5 +1,4 @@
 
-
 # **The Agentic Engineering Playbook: A Guide to Building and Maintaining Codebases with LLM Agents**
 
 ## **Part I: The Foundation \- Upfront Planning and Architecture**
@@ -30,10 +29,10 @@ By providing a failing test case directly in the prompt, the developer gives the
 
 Effective AC for agent-generated code must extend beyond simple functional correctness. A comprehensive set of criteria should address the following domains:
 
-* **Functional Correctness:** The code must produce the correct output for a given set of inputs and pass all provided unit and integration tests.11  
-* **Performance:** The code must meet specified performance benchmarks (e.g., response time, resource consumption) and not introduce inefficiencies.11  
-* **Security:** The code must not introduce new vulnerabilities (e.g., SQL injection, insecure dependencies) and must adhere to project security standards. LLM-generated code has been shown to introduce vulnerabilities if not carefully checked.8  
-* **Maintainability & Readability:** The code must be well-structured, easy to understand, and adhere to the project's established coding conventions and style guides.11  
+* **Functional Correctness:** The code must produce the correct output for a given set of inputs and pass all provided unit and integration tests.11
+* **Performance:** The code must meet specified performance benchmarks (e.g., response time, resource consumption) and not introduce inefficiencies.11
+* **Security:** The code must not introduce new vulnerabilities (e.g., SQL injection, insecure dependencies) and must adhere to project security standards. LLM-generated code has been shown to introduce vulnerabilities if not carefully checked.8
+* **Maintainability & Readability:** The code must be well-structured, easy to understand, and adhere to the project's established coding conventions and style guides.11
 * **Integration:** The code must correctly integrate with existing modules, respecting established APIs and data contracts.
 
 **Template: Acceptance Criteria in a Prompt**
@@ -42,17 +41,17 @@ Effective AC for agent-generated code must extend beyond simple functional corre
 
 **Acceptance Criteria:**
 
-1. **Functional:**  
-   * The endpoint MUST accept a POST request at /api/v1/auth/login.  
-   * The request body MUST contain email and password fields.  
-   * On successful authentication, it MUST return a JWT with a 200 status code.  
+1. **Functional:**
+   * The endpoint MUST accept a POST request at /api/v1/auth/login.
+   * The request body MUST contain email and password fields.
+   * On successful authentication, it MUST return a JWT with a 200 status code.
    * On failed authentication, it MUST return an error message with a 401 status code.
 
-   * # **The implementation MUST pass the following Pytest tests:python**       **tests/test\_auth.py**       **def test\_login\_success(client):**      **\#... test implementation...**      **def test\_login\_failure\_wrong\_password(client):**      **\#... test implementation...** 
+   * # **The implementation MUST pass the following Pytest tests:python**       **tests/test\_auth.py**       **def test\_login\_success(client):**      **\#... test implementation...**      **def test\_login\_failure\_wrong\_password(client):**      **\#... test implementation...**
 
-2. **Non-Functional:**  
-   * **Security:** Password hashing MUST use the Argon2 algorithm. The endpoint MUST be protected against timing attacks.  
-   * **Performance:** The average response time MUST be less than 150ms under a load of 50 concurrent requests.  
+2. **Non-Functional:**
+   * **Security:** Password hashing MUST use the Argon2 algorithm. The endpoint MUST be protected against timing attacks.
+   * **Performance:** The average response time MUST be less than 150ms under a load of 50 concurrent requests.
    * **Maintainability:** The code MUST adhere to the conventions defined in CONVENTIONS.md and achieve a "Grade A" from the Pylint static analyzer.
 
 \#\#\#\# 1.3 Definition of Done (DoD) for Agent-Completed Tasks
@@ -65,15 +64,15 @@ The DoD transforms a subjective state ("I think the agent is done") into an obje
 
 A \`DEFINITION\_OF\_DONE.md\` file in the repository might contain the following checklist for any agent-generated feature:
 
-\- \[ \] All acceptance criteria for the user story have been met.  
-\- \[ \] All new code is formatted according to the project's linter configuration (\`ruff.toml\` / \`.eslintrc.json\`).  
-\- \[ \] Unit tests have been generated for all new functions and classes.  
-\- \[ \] All existing and new tests pass in the CI pipeline.  
-\- \[ \] Test coverage has not decreased.  
-\- \[ \] Code comments and docstrings have been generated for all new public APIs.  
-\- \[ \] The relevant \`README.md\` or other documentation has been updated to reflect the changes.  
-\- \[ \] No new high or critical severity security vulnerabilities have been introduced, as verified by a static analysis security testing (SAST) tool.  
-\- \[ \] The changes have been successfully deployed to a staging environment.  
+\- \[ \] All acceptance criteria for the user story have been met.
+\- \[ \] All new code is formatted according to the project's linter configuration (\`ruff.toml\` / \`.eslintrc.json\`).
+\- \[ \] Unit tests have been generated for all new functions and classes.
+\- \[ \] All existing and new tests pass in the CI pipeline.
+\- \[ \] Test coverage has not decreased.
+\- \[ \] Code comments and docstrings have been generated for all new public APIs.
+\- \[ \] The relevant \`README.md\` or other documentation has been updated to reflect the changes.
+\- \[ \] No new high or critical severity security vulnerabilities have been introduced, as verified by a static analysis security testing (SAST) tool.
+\- \[ \] The changes have been successfully deployed to a staging environment.
 \- \[ \] The final implementation has been reviewed and approved by a human developer.
 
 \#\#\#\# 1.4 Architectural Decision Records (ADRs) as Agent Guardrails
@@ -132,30 +131,30 @@ With a solid foundation of specifications and architecture in place, the focus s
 
 This section outlines a complete, repeatable workflow for developing a software feature using a multi-agent team. This process integrates the planning principles from Part I into a structured, iterative development cycle.
 
-\*   \*\*Step 1: Idea → Spec\*\*  
+\*   \*\*Step 1: Idea → Spec\*\*
     The process begins with a high-level feature idea from a product manager or stakeholder. This idea is then formalized into a detailed, machine-readable specification document as described in Section 1\. To accelerate this process, an "Architect Agent" can be employed. The developer provides the agent with the high-level goal and any relevant existing documentation. The Architect Agent then generates a draft of the specification, a new ADR for any significant architectural changes, and a preliminary set of acceptance criteria, all formatted according to the project's templates. The developer reviews and refines these documents to ensure they are complete and unambiguous.
 
-\*   \*\*Step 2: Spec → Scaffold\*\*  
+\*   \*\*Step 2: Spec → Scaffold\*\*
     Once the specification is finalized, a "Scaffolder Agent" is invoked. This agent's task is to read the specification and create the necessary file and folder structure for the new feature. It generates boilerplate code, empty test files, configuration entries, and any other required initial artifacts. This automates the tedious setup process and ensures that all new features start with a consistent structure.
 
-\*   \*\*Step 3: Iterative Coding Loop (The Core Loop)\*\*  
-    This is the central cycle of agentic development, where the feature is implemented piece by piece. The loop is designed to be small, fast, and highly iterative, minimizing risk and providing constant feedback.  
-    1\.  \*\*Select a Sub-Task:\*\* The developer selects a small, self-contained part of the feature from the specification—ideally, one that corresponds to a single acceptance criterion.  
-    2\.  \*\*Write a Failing Test:\*\* The developer writes a single, failing unit or integration test that verifies the functionality of the selected sub-task. Alternatively, a "Tester Agent" can be prompted to generate this test based on the relevant acceptance criterion.  
-    3\.  \*\*Prompt the Implementer Agent:\*\* The developer prompts an "Implementer Agent" to write the code that will make the failing test pass. This prompt is highly contextualized and must include:  
-        \*   The specific instruction (e.g., "Implement the \`calculate\_tax\` function").  
-        \*   The full content of the failing test file.  
-        \*   The relevant section of the specification document.  
-        \*   Any relevant ADRs.  
-        \*   The project's \`CONVENTIONS.md\` file.  
-    4\.  \*\*Agent Execution and Diff Generation:\*\* The agent uses its available tools (e.g., file search, file read) to gather any additional context it needs. It then generates the required code modifications and, crucially, outputs them as a \`git diff\` patch rather than writing directly to the filesystem.\[21\]  
-    5\.  \*\*Review and Apply:\*\* The developer reviews the generated diff. If it is correct and adheres to standards, they apply the patch. If not, they can either discard it and refine the prompt or apply it and make manual corrections.  
+\*   \*\*Step 3: Iterative Coding Loop (The Core Loop)\*\*
+    This is the central cycle of agentic development, where the feature is implemented piece by piece. The loop is designed to be small, fast, and highly iterative, minimizing risk and providing constant feedback.
+    1\.  \*\*Select a Sub-Task:\*\* The developer selects a small, self-contained part of the feature from the specification—ideally, one that corresponds to a single acceptance criterion.
+    2\.  \*\*Write a Failing Test:\*\* The developer writes a single, failing unit or integration test that verifies the functionality of the selected sub-task. Alternatively, a "Tester Agent" can be prompted to generate this test based on the relevant acceptance criterion.
+    3\.  \*\*Prompt the Implementer Agent:\*\* The developer prompts an "Implementer Agent" to write the code that will make the failing test pass. This prompt is highly contextualized and must include:
+        \*   The specific instruction (e.g., "Implement the \`calculate\_tax\` function").
+        \*   The full content of the failing test file.
+        \*   The relevant section of the specification document.
+        \*   Any relevant ADRs.
+        \*   The project's \`CONVENTIONS.md\` file.
+    4\.  \*\*Agent Execution and Diff Generation:\*\* The agent uses its available tools (e.g., file search, file read) to gather any additional context it needs. It then generates the required code modifications and, crucially, outputs them as a \`git diff\` patch rather than writing directly to the filesystem.\[21\]
+    5\.  \*\*Review and Apply:\*\* The developer reviews the generated diff. If it is correct and adheres to standards, they apply the patch. If not, they can either discard it and refine the prompt or apply it and make manual corrections.
     6\.  \*\*Repeat:\*\* The developer runs the tests to confirm that the new test passes and no existing tests have been broken. The loop then repeats with the next sub-task.
 
-\*   \*\*Step 4: Tests → Docs\*\*  
+\*   \*\*Step 4: Tests → Docs\*\*
     After the entire feature is implemented and all tests are passing, a "Documenter Agent" is tasked with generating and updating the human-readable documentation. The agent is provided with the final code, the original specification, and the full test suite. It uses this information to generate code comments, docstrings, update the feature's \`README.md\`, and create usage examples. Tools like DocuWriter.ai and others demonstrate the increasing capability of AI to automate this process.\[6, 22\]
 
-\*   \*\*Step 5: Review and Release\*\*  
+\*   \*\*Step 5: Review and Release\*\*
     The agent's work, which has been committed incrementally throughout the process, is compiled into a pull request. The PR description should be generated by an agent and include a link to the original specification, a summary of the changes, and a reference to the ADRs that guided the implementation. This provides human reviewers with the full context needed to effectively evaluate the agent's work. Once approved, the feature follows the standard CI/CD pipeline for release.
 
 \#\#\# Section 4: The Agent Prompting Compendium
@@ -164,115 +163,115 @@ The effectiveness of a multi-agent system depends on assigning clear roles and r
 
 \#\#\#\# 4.1 The Planner/Architect Agent
 
-\*   \*\*Responsibility:\*\* Decompose high-level user requests into a detailed, step-by-step implementation plan. Identify all files that will need to be created or modified and draft any necessary ADRs.  
-\*   \*\*System Prompt Template:\*\*  
-    \`\`\`  
-    You are an expert software architect. Your goal is to take a user's feature request and create a detailed, step-by-step implementation plan. You must think holistically about the existing codebase, consider potential side effects, and adhere to all existing architectural decisions documented in the provided ADRs. Your output MUST be a single JSON object that conforms to the provided JSON schema. Do not include any explanatory text before or after the JSON object.  
-    \`\`\`  
-\*   \*\*Output Schema (JSON):\*\*  
-    \`\`\`json  
-    {  
-      "type": "object",  
-      "properties": {  
-        "planSummary": {  
-          "type": "string",  
-          "description": "A brief, one-sentence summary of the implementation plan."  
-        },  
-        "affectedFiles": {  
-          "type": "array",  
-          "items": {  
-            "type": "object",  
-            "properties": {  
-              "path": { "type": "string" },  
-              "action": { "enum": },  
-              "description": { "type": "string" }  
-            },  
-            "required": \["path", "action", "description"\]  
-          }  
-        },  
-        "stepByStepPlan": {  
-          "type": "array",  
-          "items": { "type": "string", "description": "A detailed, sequential instruction for the Coder Agent." }  
-        },  
-        "newADR": {  
-          "type": "object",  
-          "properties": {  
-            "title": { "type": "string" },  
-            "context": { "type": "string" },  
-            "decision": { "type": "string" },  
-            "consequences": { "type": "string" }  
-          },  
-          "description": "A draft for a new ADR if a significant architectural decision is needed. Null if not applicable."  
-        }  
-      },  
-      "required":  
-    }  
+\*   \*\*Responsibility:\*\* Decompose high-level user requests into a detailed, step-by-step implementation plan. Identify all files that will need to be created or modified and draft any necessary ADRs.
+\*   \*\*System Prompt Template:\*\*
+    \`\`\`
+    You are an expert software architect. Your goal is to take a user's feature request and create a detailed, step-by-step implementation plan. You must think holistically about the existing codebase, consider potential side effects, and adhere to all existing architectural decisions documented in the provided ADRs. Your output MUST be a single JSON object that conforms to the provided JSON schema. Do not include any explanatory text before or after the JSON object.
+    \`\`\`
+\*   \*\*Output Schema (JSON):\*\*
+    \`\`\`json
+    {
+      "type": "object",
+      "properties": {
+        "planSummary": {
+          "type": "string",
+          "description": "A brief, one-sentence summary of the implementation plan."
+        },
+        "affectedFiles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": { "type": "string" },
+              "action": { "enum": },
+              "description": { "type": "string" }
+            },
+            "required": \["path", "action", "description"\]
+          }
+        },
+        "stepByStepPlan": {
+          "type": "array",
+          "items": { "type": "string", "description": "A detailed, sequential instruction for the Coder Agent." }
+        },
+        "newADR": {
+          "type": "object",
+          "properties": {
+            "title": { "type": "string" },
+            "context": { "type": "string" },
+            "decision": { "type": "string" },
+            "consequences": { "type": "string" }
+          },
+          "description": "A draft for a new ADR if a significant architectural decision is needed. Null if not applicable."
+        }
+      },
+      "required":
+    }
     \`\`\`
 
 \#\#\#\# 4.2 The Implementer/Coder Agent
 
-\*   \*\*Responsibility:\*\* Execute a single, specific instruction from the Planner's output. Write, modify, and debug code using a provided set of tools.  
-\*   \*\*System Prompt Template:\*\*  
-    \`\`\`  
-    You are an expert programmer. Your task is to execute a single step from an implementation plan. You MUST adhere strictly to the provided context, including existing code, project conventions, and architectural decisions. You have access to a set of tools to interact with the file system. Your response MUST be a JSON object representing a single tool call, or a final completion message. You must think step-by-step and reason about which tool to use.  
-    \`\`\`  
-\*   \*\*Output Schema (JSON for Tool Call):\*\*  
-    \`\`\`json  
-    {  
-      "type": "object",  
-      "properties": {  
-        "toolName": { "enum": },  
-        "parameters": { "type": "object" }  
-      },  
-      "required": \["toolName", "parameters"\]  
-    }  
+\*   \*\*Responsibility:\*\* Execute a single, specific instruction from the Planner's output. Write, modify, and debug code using a provided set of tools.
+\*   \*\*System Prompt Template:\*\*
+    \`\`\`
+    You are an expert programmer. Your task is to execute a single step from an implementation plan. You MUST adhere strictly to the provided context, including existing code, project conventions, and architectural decisions. You have access to a set of tools to interact with the file system. Your response MUST be a JSON object representing a single tool call, or a final completion message. You must think step-by-step and reason about which tool to use.
+    \`\`\`
+\*   \*\*Output Schema (JSON for Tool Call):\*\*
+    \`\`\`json
+    {
+      "type": "object",
+      "properties": {
+        "toolName": { "enum": },
+        "parameters": { "type": "object" }
+      },
+      "required": \["toolName", "parameters"\]
+    }
     \`\`\`
 
 \#\#\#\# 4.3 The Tester Agent
 
-\*   \*\*Responsibility:\*\* Generate comprehensive test suites for a given piece of code based on its specification.  
-\*   \*\*System Prompt Template:\*\*  
-    \`\`\`  
-    You are a meticulous Quality Assurance Engineer specializing in test automation. Given a source code file and its corresponding acceptance criteria, your job is to write a complete and robust test suite using Pytest. The tests must cover all specified requirements, including positive paths, negative paths, and edge cases. Your output MUST be a single, complete Python code block containing the test file. Do not include any other text.  
+\*   \*\*Responsibility:\*\* Generate comprehensive test suites for a given piece of code based on its specification.
+\*   \*\*System Prompt Template:\*\*
+    \`\`\`
+    You are a meticulous Quality Assurance Engineer specializing in test automation. Given a source code file and its corresponding acceptance criteria, your job is to write a complete and robust test suite using Pytest. The tests must cover all specified requirements, including positive paths, negative paths, and edge cases. Your output MUST be a single, complete Python code block containing the test file. Do not include any other text.
     \`\`\`
 
 \#\#\#\# 4.4 The Reviewer/Refactorer Agent
 
-\*   \*\*Responsibility:\*\* Analyze a code diff for quality, adherence to conventions, potential bugs, and opportunities for improvement.  
-\*   \*\*System Prompt Template:\*\*  
-    \`\`\`  
-    You are a Principal Engineer performing a code review. Analyze the provided code diff. Your review must be strict and thorough. Identify any deviations from the \`CONVENTIONS.md\` file, potential bugs, security vulnerabilities, performance issues, or opportunities for simplification and refactoring. Your output MUST be a JSON object conforming to the provided schema, containing a list of review comments.  
-    \`\`\`  
-\*   \*\*Output Schema (JSON):\*\*  
-    \`\`\`json  
-    {  
-      "type": "object",  
-      "properties": {  
-        "reviewComments": {  
-          "type": "array",  
-          "items": {  
-            "type": "object",  
-            "properties": {  
-              "filePath": { "type": "string" },  
-              "lineNumber": { "type": "integer" },  
-              "comment": { "type": "string" },  
-              "severity": { "enum": }  
-            },  
-            "required": \["filePath", "lineNumber", "comment", "severity"\]  
-          }  
-        }  
-      },  
-      "required": \["reviewComments"\]  
-    }  
+\*   \*\*Responsibility:\*\* Analyze a code diff for quality, adherence to conventions, potential bugs, and opportunities for improvement.
+\*   \*\*System Prompt Template:\*\*
+    \`\`\`
+    You are a Principal Engineer performing a code review. Analyze the provided code diff. Your review must be strict and thorough. Identify any deviations from the \`CONVENTIONS.md\` file, potential bugs, security vulnerabilities, performance issues, or opportunities for simplification and refactoring. Your output MUST be a JSON object conforming to the provided schema, containing a list of review comments.
+    \`\`\`
+\*   \*\*Output Schema (JSON):\*\*
+    \`\`\`json
+    {
+      "type": "object",
+      "properties": {
+        "reviewComments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "filePath": { "type": "string" },
+              "lineNumber": { "type": "integer" },
+              "comment": { "type": "string" },
+              "severity": { "enum": }
+            },
+            "required": \["filePath", "lineNumber", "comment", "severity"\]
+          }
+        }
+      },
+      "required": \["reviewComments"\]
+    }
     \`\`\`
 
 \*\*Table 1: Agent Persona Prompt Matrix\*\*
 
-| Persona | Core Responsibility | Key Inputs | Output Schema |  
-| :--- | :--- | :--- | :--- |  
-| \*\*Planner/Architect\*\* | Decompose tasks, create plans, draft ADRs. | Feature Request, Existing Codebase Context, ADRs | JSON object with plan, files, steps. |  
-| \*\*Implementer/Coder\*\* | Execute one step of a plan by writing/modifying code. | Plan Step, Relevant Code Files, Conventions | JSON object for a single tool call. |  
-| \*\*Tester\*\* | Generate unit and integration tests. | Source Code File, Acceptance Criteria | A complete code block for the test file. |  
+| Persona | Core Responsibility | Key Inputs | Output Schema |
+| :--- | :--- | :--- | :--- |
+| \*\*Planner/Architect\*\* | Decompose tasks, create plans, draft ADRs. | Feature Request, Existing Codebase Context, ADRs | JSON object with plan, files, steps. |
+| \*\*Implementer/Coder\*\* | Execute one step of a plan by writing/modifying code. | Plan Step, Relevant Code Files, Conventions | JSON object for a single tool call. |
+| \*\*Tester\*\* | Generate unit and integration tests. | Source Code File, Acceptance Criteria | A complete code block for the test file. |
 | \*\*Reviewer/Refactorer\*\* | Analyze code diffs for quality and improvements. | Code Diff, Conventions File | JSON object with a list of review comments. |
 
 \#\#\# Section 5: Core Techniques for Agent Reliability and Control
@@ -283,15 +282,15 @@ Beyond prompting, a set of technical mechanisms is required to provide agents wi
 
 An agent cannot operate effectively on a codebase it does not understand. However, providing the entire codebase as context is infeasible due to context window limitations. The first layer of context is a high-level summary or "table of contents."
 
-\*   \*\*Repository Maps:\*\* Popularized by tools like Aider, a repo map is a concise text representation of the repository's structure, including file paths and the signatures of key classes and functions within them.\[17\] This gives the agent a bird's-eye view, allowing it to quickly identify potentially relevant files for a given task without needing to read their full contents. This serves as the agent's fast, low-token, short-term working memory.  
+\*   \*\*Repository Maps:\*\* Popularized by tools like Aider, a repo map is a concise text representation of the repository's structure, including file paths and the signatures of key classes and functions within them.\[17\] This gives the agent a bird's-eye view, allowing it to quickly identify potentially relevant files for a given task without needing to read their full contents. This serves as the agent's fast, low-token, short-term working memory.
 \*   \*\*Symbol Graphs:\*\* A more advanced approach involves parsing the codebase to build a graph where nodes represent code entities (functions, classes, variables) and edges represent relationships (calls, inherits from, implements).\[26, 27\] Querying this graph allows the agent to perform more sophisticated analysis, such as finding all usages of a function before modifying it.
 
 \#\#\#\# 5.2 Providing Context II: Retrieval-Augmented Generation (RAG) for Codebases
 
-RAG is the most powerful technique for providing deep, specific context, acting as the agent's long-term memory. This process involves:  
-1\.  \*\*Indexing:\*\* The entire codebase is processed offline. Source files are split into meaningful chunks (e.g., by function or class, often using an Abstract Syntax Tree (AST) parser for precision). Each chunk is then converted into a numerical vector representation (an embedding) using a sentence-transformer model.\[28, 29, 30\]  
-2\.  \*\*Storage:\*\* These embeddings are stored in a specialized vector database (e.g., ChromaDB, Pinecone).\[31, 32\]  
-3\.  \*\*Retrieval:\*\* At runtime, when the agent needs to perform a task, the user's query or the current plan step is also converted into an embedding. The vector database is then queried to find the code chunks with the most semantically similar embeddings.\[33, 34\]  
+RAG is the most powerful technique for providing deep, specific context, acting as the agent's long-term memory. This process involves:
+1\.  \*\*Indexing:\*\* The entire codebase is processed offline. Source files are split into meaningful chunks (e.g., by function or class, often using an Abstract Syntax Tree (AST) parser for precision). Each chunk is then converted into a numerical vector representation (an embedding) using a sentence-transformer model.\[28, 29, 30\]
+2\.  \*\*Storage:\*\* These embeddings are stored in a specialized vector database (e.g., ChromaDB, Pinecone).\[31, 32\]
+3\.  \*\*Retrieval:\*\* At runtime, when the agent needs to perform a task, the user's query or the current plan step is also converted into an embedding. The vector database is then queried to find the code chunks with the most semantically similar embeddings.\[33, 34\]
 4\.  \*\*Augmentation:\*\* These retrieved code chunks are then injected into the agent's prompt along with the primary instruction, providing it with highly relevant, specific examples and context from the codebase.
 
 This cognitive architecture, combining a quick repo map lookup with a deep RAG retrieval, is highly effective. The agent first uses the repo map to identify a small set of candidate files, and then uses RAG to pull the most relevant functions or classes from within those files, optimizing for both context quality and token efficiency.
@@ -300,8 +299,8 @@ This cognitive architecture, combining a quick repo map lookup with a deep RAG r
 
 To make an agent's behavior predictable and its output machine-parsable, its responses must be constrained to a strict schema. This is the most critical technique for building reliable, multi-agent systems and tool-using agents.
 
-\*   \*\*Structured Outputs:\*\* Instead of allowing free-text responses, the agent is instructed to generate a JSON object that conforms to a predefined schema.  
-    \*   \*\*In Python\*\*, this is commonly achieved using the Pydantic library. A Pydantic model defines the desired data structure, and a parser like LangChain's \`PydanticOutputParser\` can be used to both generate formatting instructions for the LLM and validate the resulting output.\[35, 36, 37\]  
+\*   \*\*Structured Outputs:\*\* Instead of allowing free-text responses, the agent is instructed to generate a JSON object that conforms to a predefined schema.
+    \*   \*\*In Python\*\*, this is commonly achieved using the Pydantic library. A Pydantic model defines the desired data structure, and a parser like LangChain's \`PydanticOutputParser\` can be used to both generate formatting instructions for the LLM and validate the resulting output.\[35, 36, 37\]
     \*   \*\*In TypeScript\*\*, libraries like Zod serve a similar purpose. Alternatively, Microsoft's TypeChat leverages the TypeScript compiler itself to validate and even repair non-conforming LLM output against a set of TypeScript interfaces.\[38\]
 
 \*   \*\*Function/Tool Calling:\*\* Modern LLMs from providers like OpenAI and Google have native support for "function calling" or "tool use".\[39\] This is a more refined version of structured output where the model is specifically trained to generate a JSON object that corresponds to a function signature. The model's output directly specifies the name of a tool to call (e.g., \`writeFile\`) and a dictionary of arguments (\`{"path": "src/main.py", "content": "..."}\`). This is the preferred mechanism for orchestrating agent actions, as it is more robust and directly supported by the model's architecture.
@@ -312,9 +311,9 @@ Allowing an agent to directly modify the filesystem is risky. A safer and more a
 
 \*   \*\*Patch/Diff Workflows:\*\* The agent's "write" operations should not directly alter files. Instead, the agent should be prompted to output its proposed changes in the form of a unified diff format. Tools like \`gptdiff\` demonstrate this pattern effectively.\[21\] A developer or an automated system can then review this patch before applying it. This provides a crucial human-in-the-loop verification step and prevents catastrophic errors.
 
-\*   \*\*Guardrails:\*\* These are automated checks that enforce rules on the agent's behavior.  
-    \*   \*\*Filesystem Guardrails:\*\* A simple but effective guardrail is a wrapper around the agent's file system tools. Before executing a \`writeFile\` or \`deleteFile\` command, this wrapper checks the target path against a predefined allowlist of files and directories. Any attempt to modify a file outside this scope is blocked.\[40\]  
-    \*   \*\*Code Analysis Guardrails:\*\* After a patch is generated but before it is applied, a series of automated quality checks should be run. This includes running code formatters (e.g., Black, Prettier), linters (e.g., Ruff, ESLint), and static type checkers (e.g., Mypy, TypeScript Compiler). Patches that fail these checks are automatically rejected.  
+\*   \*\*Guardrails:\*\* These are automated checks that enforce rules on the agent's behavior.
+    \*   \*\*Filesystem Guardrails:\*\* A simple but effective guardrail is a wrapper around the agent's file system tools. Before executing a \`writeFile\` or \`deleteFile\` command, this wrapper checks the target path against a predefined allowlist of files and directories. Any attempt to modify a file outside this scope is blocked.\[40\]
+    \*   \*\*Code Analysis Guardrails:\*\* After a patch is generated but before it is applied, a series of automated quality checks should be run. This includes running code formatters (e.g., Black, Prettier), linters (e.g., Ruff, ESLint), and static type checkers (e.g., Mypy, TypeScript Compiler). Patches that fail these checks are automatically rejected.
     \*   \*\*CI/CD Guardrails:\*\* The Continuous Integration pipeline serves as the ultimate guardrail. Any code committed by an agent must pass the full suite of tests, security scans, and quality gates that are applied to human-written code. The CI process can even be enhanced with a step that validates the agent's commit message or PR description against a required format.\[41\]
 
 \#\# Part III: Tooling, Templates, and Implementation
@@ -329,170 +328,170 @@ These templates provide a production-ready starting point for new agentic softwa
 
 This template is configured for a modern Python workflow using Poetry for dependency management and \`pyproject.toml\` for centralized tool configuration, inspired by robust open-source projects like \`parlant\` and \`adk-python\`.\[42, 43\]
 
-\*   \*\*File Tree:\*\*  
-    \`\`\`  
-    /  
-    ├──.github/  
-    │   └── workflows/  
-    │       └── ci.yml  
-    ├──.vscode/  
-    │   └── settings.json  
-    ├── adr/  
-    │   ├── 0001-record-architecture-decisions.md  
-    │   └── template.md  
-    ├──.prompts/  
-    │   ├── architect.md  
-    │   ├── coder.md  
-    │   └── reviewer.md  
-    ├── src/  
-    │   └── my\_project/  
-    │       └── \_\_init\_\_.py  
-    ├── tests/  
-    │   └── \_\_init\_\_.py  
-    ├──.devcontainer/  
-    │   ├── devcontainer.json  
-    │   └── Dockerfile  
-    ├──.gitignore  
-    ├── CODEOWNERS  
-    ├── CONTRIBUTING.md  
-    ├── DEFINITION\_OF\_DONE.md  
-    ├── pyproject.toml  
-    ├── poetry.lock  
-    └── README.md  
+\*   \*\*File Tree:\*\*
+    \`\`\`
+    /
+    ├──.github/
+    │   └── workflows/
+    │       └── ci.yml
+    ├──.vscode/
+    │   └── settings.json
+    ├── adr/
+    │   ├── 0001-record-architecture-decisions.md
+    │   └── template.md
+    ├──.prompts/
+    │   ├── architect.md
+    │   ├── coder.md
+    │   └── reviewer.md
+    ├── src/
+    │   └── my\_project/
+    │       └── \_\_init\_\_.py
+    ├── tests/
+    │   └── \_\_init\_\_.py
+    ├──.devcontainer/
+    │   ├── devcontainer.json
+    │   └── Dockerfile
+    ├──.gitignore
+    ├── CODEOWNERS
+    ├── CONTRIBUTING.md
+    ├── DEFINITION\_OF\_DONE.md
+    ├── pyproject.toml
+    ├── poetry.lock
+    └── README.md
     \`\`\`
 
-\*   \*\*Key File Contents:\*\*  
-    \*   \*\*\`pyproject.toml\`:\*\*  
-        \`\`\`toml  
-        \[tool.poetry\]  
-        name \= "my-project"  
-        version \= "0.1.0"  
-        description \= ""  
+\*   \*\*Key File Contents:\*\*
+    \*   \*\*\`pyproject.toml\`:\*\*
+        \`\`\`toml
+        \[tool.poetry\]
+        name \= "my-project"
+        version \= "0.1.0"
+        description \= ""
         authors \=
 
-        \[tool.poetry.dependencies\]  
-        python \= "^3.11"  
-        langchain \= "^0.2.0"  
-        pydantic \= "^2.7.0"  
-        openai \= "^1.28.0"  
+        \[tool.poetry.dependencies\]
+        python \= "^3.11"
+        langchain \= "^0.2.0"
+        pydantic \= "^2.7.0"
+        openai \= "^1.28.0"
         chromadb \= "^0.5.0"
 
-        \[tool.poetry.group.dev.dependencies\]  
-        pytest \= "^8.2.0"  
-        pytest-cov \= "^5.0.0"  
-        ruff \= "^0.4.4"  
+        \[tool.poetry.group.dev.dependencies\]
+        pytest \= "^8.2.0"
+        pytest-cov \= "^5.0.0"
+        ruff \= "^0.4.4"
         mypy \= "^1.10.0"
 
-        \[tool.ruff\]  
-        line-length \= 88  
+        \[tool.ruff\]
+        line-length \= 88
         select \=
 
-        \[tool.mypy\]  
-        strict \= true  
-        \`\`\`  
-    \*   \*\*\`.github/workflows/ci.yml\`:\*\*  
-        \`\`\`yaml  
+        \[tool.mypy\]
+        strict \= true
+        \`\`\`
+    \*   \*\*\`.github/workflows/ci.yml\`:\*\*
+        \`\`\`yaml
         name: CI
 
         on: \[push, pull\_request\]
 
-        jobs:  
-          build:  
-            runs-on: ubuntu-latest  
-            steps:  
-            \- uses: actions/checkout@v4  
-            \- name: Set up Python  
-              uses: actions/setup-python@v5  
-              with:  
-                python-version: '3.11'  
-            \- name: Install dependencies  
-              run: |  
-                pip install poetry  
-                poetry install  
-            \- name: Lint with Ruff  
-              run: poetry run ruff check src tests  
-            \- name: Type check with Mypy  
-              run: poetry run mypy src  
-            \- name: Test with Pytest  
-              run: poetry run pytest \--cov=src  
+        jobs:
+          build:
+            runs-on: ubuntu-latest
+            steps:
+            \- uses: actions/checkout@v4
+            \- name: Set up Python
+              uses: actions/setup-python@v5
+              with:
+                python-version: '3.11'
+            \- name: Install dependencies
+              run: |
+                pip install poetry
+                poetry install
+            \- name: Lint with Ruff
+              run: poetry run ruff check src tests
+            \- name: Type check with Mypy
+              run: poetry run mypy src
+            \- name: Test with Pytest
+              run: poetry run pytest \--cov=src
         \`\`\`
 
 \#\#\#\# 6.2 TypeScript Agentic Project Template
 
 This template uses PNPM for efficient monorepo-style dependency management and includes strict configurations for ESLint, Prettier, and TypeScript, reflecting best practices from projects like \`voltagent\` and \`agentic\`.\[44, 45\]
 
-\*   \*\*File Tree:\*\*  
-    \`\`\`  
-    /  
-    ├──.github/  
-    │   └── workflows/  
-    │       └── ci.yml  
-    ├──.vscode/  
-    │   └── settings.json  
-    ├── adr/  
-    │   ├── 0001-record-architecture-decisions.md  
-    │   └── template.md  
-    ├──.prompts/  
-    │   ├── architect.ts  
-    │   ├── coder.ts  
-    │   └── reviewer.ts  
-    ├── packages/  
-    │   └── core/  
-    │       ├── src/  
-    │       │   └── index.ts  
-    │       └── package.json  
-    ├──.devcontainer/  
-    │   ├── devcontainer.json  
-    │   └── Dockerfile  
-    ├──.gitignore  
-    ├──.eslintrc.cjs  
-    ├──.prettierrc.json  
-    ├── CODEOWNERS  
-    ├── CONTRIBUTING.md  
-    ├── DEFINITION\_OF\_DONE.md  
-    ├── package.json  
-    ├── pnpm-workspace.yaml  
-    ├── tsconfig.json  
-    └── README.md  
+\*   \*\*File Tree:\*\*
+    \`\`\`
+    /
+    ├──.github/
+    │   └── workflows/
+    │       └── ci.yml
+    ├──.vscode/
+    │   └── settings.json
+    ├── adr/
+    │   ├── 0001-record-architecture-decisions.md
+    │   └── template.md
+    ├──.prompts/
+    │   ├── architect.ts
+    │   ├── coder.ts
+    │   └── reviewer.ts
+    ├── packages/
+    │   └── core/
+    │       ├── src/
+    │       │   └── index.ts
+    │       └── package.json
+    ├──.devcontainer/
+    │   ├── devcontainer.json
+    │   └── Dockerfile
+    ├──.gitignore
+    ├──.eslintrc.cjs
+    ├──.prettierrc.json
+    ├── CODEOWNERS
+    ├── CONTRIBUTING.md
+    ├── DEFINITION\_OF\_DONE.md
+    ├── package.json
+    ├── pnpm-workspace.yaml
+    ├── tsconfig.json
+    └── README.md
     \`\`\`
 
-\*   \*\*Key File Contents:\*\*  
-    \*   \*\*\`package.json\` (root):\*\*  
-        \`\`\`json  
-        {  
-          "name": "my-ts-project",  
-          "private": true,  
-          "scripts": {  
-            "build": "turbo run build",  
-            "test": "turbo run test",  
-            "lint": "turbo run lint",  
-            "format": "prettier \--write \\"\*\*/\*.{ts,tsx,md}\\""  
-          },  
-          "devDependencies": {  
-            "@types/jest": "^29.5.12",  
-            "@typescript-eslint/eslint-plugin": "^7.9.0",  
-            "eslint": "^8.57.0",  
-            "jest": "^29.7.0",  
-            "prettier": "^3.2.5",  
-            "ts-jest": "^29.1.2",  
-            "turbo": "^2.0.1",  
-            "typescript": "^5.4.5"  
-          }  
-        }  
-        \`\`\`  
-    \*   \*\*\`tsconfig.json\`:\*\*  
-        \`\`\`json  
-        {  
-          "compilerOptions": {  
-            "target": "ES2022",  
-            "module": "commonjs",  
-            "strict": true,  
-            "esModuleInterop": true,  
-            "skipLibCheck": true,  
-            "forceConsistentCasingInFileNames": true,  
-            "resolveJsonModule": true  
-          }  
-        }  
+\*   \*\*Key File Contents:\*\*
+    \*   \*\*\`package.json\` (root):\*\*
+        \`\`\`json
+        {
+          "name": "my-ts-project",
+          "private": true,
+          "scripts": {
+            "build": "turbo run build",
+            "test": "turbo run test",
+            "lint": "turbo run lint",
+            "format": "prettier \--write \\"\*\*/\*.{ts,tsx,md}\\""
+          },
+          "devDependencies": {
+            "@types/jest": "^29.5.12",
+            "@typescript-eslint/eslint-plugin": "^7.9.0",
+            "eslint": "^8.57.0",
+            "jest": "^29.7.0",
+            "prettier": "^3.2.5",
+            "ts-jest": "^29.1.2",
+            "turbo": "^2.0.1",
+            "typescript": "^5.4.5"
+          }
+        }
+        \`\`\`
+    \*   \*\*\`tsconfig.json\`:\*\*
+        \`\`\`json
+        {
+          "compilerOptions": {
+            "target": "ES2022",
+            "module": "commonjs",
+            "strict": true,
+            "esModuleInterop": true,
+            "skipLibCheck": true,
+            "forceConsistentCasingInFileNames": true,
+            "resolveJsonModule": true
+          }
+        }
         \`\`\`
 
 \#\#\# Section 7: The Automation Toolkit \- Scripts and Actions
@@ -503,26 +502,26 @@ These scripts provide reusable automation for the core tasks in the agentic deve
 
 A simple Python script to generate the repository structure from a template.
 
-\`\`\`python  
-import os  
+\`\`\`python
+import os
 import shutil
 
-def scaffold\_project(project\_name, lang="python"):  
-    """Generates a new project directory from a template."""  
-    template\_dir \= f"./templates/{lang}\_template"  
+def scaffold\_project(project\_name, lang="python"):
+    """Generates a new project directory from a template."""
+    template\_dir \= f"./templates/{lang}\_template"
     target\_dir \= f"./{project\_name}"
 
-    if os.path.exists(target\_dir):  
-        print(f"Error: Directory '{target\_dir}' already exists.")  
+    if os.path.exists(target\_dir):
+        print(f"Error: Directory '{target\_dir}' already exists.")
         return
 
-    shutil.copytree(template\_dir, target\_dir)  
+    shutil.copytree(template\_dir, target\_dir)
     print(f"Successfully created '{project\_name}' project from {lang} template.")
 
-if \_\_name\_\_ \== "\_\_main\_\_":  
-    \# Example usage:  
-    \# scaffold\_project("new-py-agent", "python")  
-    \# scaffold\_project("new-ts-agent", "typescript")  
+if \_\_name\_\_ \== "\_\_main\_\_":
+    \# Example usage:
+    \# scaffold\_project("new-py-agent", "python")
+    \# scaffold\_project("new-ts-agent", "typescript")
     pass
 
 #### **7.2 Repo Map Generator (repo\_map.py)**
@@ -531,45 +530,45 @@ This script generates a JSON representation of the repository's structure and ke
 
 Python
 
-import os  
-import ast  
+import os
+import ast
 import json
 
-def parse\_python\_file(file\_path):  
-    """Extracts classes and functions from a Python file."""  
-    with open(file\_path, 'r', encoding='utf-8') as f:  
-        content \= f.read()  
-    tree \= ast.parse(content)  
-    symbols \=  
-    for node in ast.walk(tree):  
-        if isinstance(node, ast.FunctionDef):  
-            symbols.append(f"def {node.name}(...):")  
-        elif isinstance(node, ast.AsyncFunctionDef):  
-            symbols.append(f"async def {node.name}(...):")  
-        elif isinstance(node, ast.ClassDef):  
-            symbols.append(f"class {node.name}:")  
+def parse\_python\_file(file\_path):
+    """Extracts classes and functions from a Python file."""
+    with open(file\_path, 'r', encoding='utf-8') as f:
+        content \= f.read()
+    tree \= ast.parse(content)
+    symbols \=
+    for node in ast.walk(tree):
+        if isinstance(node, ast.FunctionDef):
+            symbols.append(f"def {node.name}(...):")
+        elif isinstance(node, ast.AsyncFunctionDef):
+            symbols.append(f"async def {node.name}(...):")
+        elif isinstance(node, ast.ClassDef):
+            symbols.append(f"class {node.name}:")
     return symbols
 
-def generate\_repo\_map(root\_dir, output\_file="repo\_map.json"):  
-    """Generates a map of the repository."""  
-    repo\_map \= {}  
-    ignore\_dirs \= {'.git', '\_\_pycache\_\_', 'node\_modules', '.venv'}  
-    for dirpath, dirnames, filenames in os.walk(root\_dir):  
-        dirnames\[:\] \= \[d for d in dirnames if d not in ignore\_dirs\]  
-        for filename in filenames:  
-            file\_path \= os.path.join(dirpath, filename)  
-            relative\_path \= os.path.relpath(file\_path, root\_dir)  
-            if filename.endswith(".py"):  
-                repo\_map\[relative\_path\] \= parse\_python\_file(file\_path)  
-            else:  
+def generate\_repo\_map(root\_dir, output\_file="repo\_map.json"):
+    """Generates a map of the repository."""
+    repo\_map \= {}
+    ignore\_dirs \= {'.git', '\_\_pycache\_\_', 'node\_modules', '.venv'}
+    for dirpath, dirnames, filenames in os.walk(root\_dir):
+        dirnames\[:\] \= \[d for d in dirnames if d not in ignore\_dirs\]
+        for filename in filenames:
+            file\_path \= os.path.join(dirpath, filename)
+            relative\_path \= os.path.relpath(file\_path, root\_dir)
+            if filename.endswith(".py"):
+                repo\_map\[relative\_path\] \= parse\_python\_file(file\_path)
+            else:
                 repo\_map\[relative\_path\] \= "non-python\_file"
 
-    with open(output\_file, 'w') as f:  
-        json.dump(repo\_map, f, indent=2)  
+    with open(output\_file, 'w') as f:
+        json.dump(repo\_map, f, indent=2)
     print(f"Repository map saved to {output\_file}")
 
-if \_\_name\_\_ \== "\_\_main\_\_":  
-    \# generate\_repo\_map(".")  
+if \_\_name\_\_ \== "\_\_main\_\_":
+    \# generate\_repo\_map(".")
     pass
 
 #### **7.3 Code Embedding Indexer (indexer.py)**
@@ -578,34 +577,34 @@ This script demonstrates a basic RAG indexing pipeline for a codebase using Lang
 
 Python
 
-from langchain\_community.document\_loaders.generic import GenericLoader  
-from langchain\_community.document\_loaders.parsers import LanguageParser  
-from langchain\_text\_splitters import Language  
-from langchain\_community.vectorstores import Chroma  
+from langchain\_community.document\_loaders.generic import GenericLoader
+from langchain\_community.document\_loaders.parsers import LanguageParser
+from langchain\_text\_splitters import Language
+from langchain\_community.vectorstores import Chroma
 from langchain\_community.embeddings import OllamaEmbeddings \# Or any other embedding model
 
-def index\_codebase(repo\_path, db\_path="./chroma\_db"):  
-    """Creates a vector index for a codebase."""  
-    loader \= GenericLoader.from\_filesystem(  
-        repo\_path,  
-        glob="\*\*/\*",  
-        suffixes=\[".py", ".ts"\],  
-        parser=LanguageParser(language=Language.PYTHON, parser\_threshold=500),  
-    )  
+def index\_codebase(repo\_path, db\_path="./chroma\_db"):
+    """Creates a vector index for a codebase."""
+    loader \= GenericLoader.from\_filesystem(
+        repo\_path,
+        glob="\*\*/\*",
+        suffixes=\[".py", ".ts"\],
+        parser=LanguageParser(language=Language.PYTHON, parser\_threshold=500),
+    )
     documents \= loader.load()
 
-    python\_splitter \= RecursiveCharacterTextSplitter.from\_language(  
-        language=Language.PYTHON, chunk\_size=2000, chunk\_overlap=200  
-    )  
+    python\_splitter \= RecursiveCharacterTextSplitter.from\_language(
+        language=Language.PYTHON, chunk\_size=2000, chunk\_overlap=200
+    )
     texts \= python\_splitter.split\_documents(documents)
 
-    embeddings \= OllamaEmbeddings(model="nomic-embed-text") \# Example local model  
-    db \= Chroma.from\_documents(texts, embeddings, persist\_directory=db\_path)  
-    db.persist()  
+    embeddings \= OllamaEmbeddings(model="nomic-embed-text") \# Example local model
+    db \= Chroma.from\_documents(texts, embeddings, persist\_directory=db\_path)
+    db.persist()
     print(f"Codebase indexed successfully at {db\_path}")
 
-if \_\_name\_\_ \== "\_\_main\_\_":  
-    \# index\_codebase("./src")  
+if \_\_name\_\_ \== "\_\_main\_\_":
+    \# index\_codebase("./src")
     pass
 
 #### **7.4 GitHub Action for LLM Output Validation**
@@ -614,11 +613,11 @@ A CI step that runs a script to validate a structured component of a PR, such as
 
 YAML
 
-\# In.github/workflows/ci.yml  
-      \- name: Validate Agent PR Description  
-        if: startsWith(github.head\_ref, 'agent/')  
-        run: |  
-          pip install pyyaml  
+\# In.github/workflows/ci.yml
+      \- name: Validate Agent PR Description
+        if: startsWith(github.head\_ref, 'agent/')
+        run: |
+          pip install pyyaml
           python.github/scripts/validate\_pr\_description.py "${{ github.event.pull\_request.body }}"
 
 #### **7.5 Filesystem Guardrail Script (guardrail.py)**
@@ -631,19 +630,19 @@ import os
 
 ALLOWED\_WRITE\_PATHS \= \["src/", "tests/"\]
 
-def execute\_tool\_with\_guardrail(tool\_name, parameters):  
-    """Executes a tool call with a filesystem write guardrail."""  
-    if tool\_name \== "writeFile":  
-        target\_path \= parameters.get("path")  
-        is\_allowed \= any(target\_path.startswith(p) for p in ALLOWED\_WRITE\_PATHS)  
-          
-        if not is\_allowed:  
-            raise PermissionError(f"Agent action blocked: Write to '{target\_path}' is not allowed.")  
-          
-        \#... proceed with file write operation...  
-        print(f"Guardrail passed: Writing to {target\_path}")  
-    else:  
-        \#... execute other tools...  
+def execute\_tool\_with\_guardrail(tool\_name, parameters):
+    """Executes a tool call with a filesystem write guardrail."""
+    if tool\_name \== "writeFile":
+        target\_path \= parameters.get("path")
+        is\_allowed \= any(target\_path.startswith(p) for p in ALLOWED\_WRITE\_PATHS)
+
+        if not is\_allowed:
+            raise PermissionError(f"Agent action blocked: Write to '{target\_path}' is not allowed.")
+
+        \#... proceed with file write operation...
+        print(f"Guardrail passed: Writing to {target\_path}")
+    else:
+        \#... execute other tools...
         pass
 
 ## **Part IV: Evaluation, Maintenance, and Troubleshooting**
@@ -658,39 +657,39 @@ To improve agent performance systematically, it is necessary to measure it objec
 
 A project should maintain its own suite of regression tests for its agents. This can be implemented as a simple evaluation harness.
 
-* **Task Definition:** Each evaluation task is defined in a simple format (e.g., a JSON file) that specifies:  
-  * task\_id: A unique identifier.  
-  * description: The natural language prompt for the agent.  
-  * start\_commit: The git commit hash representing the initial state of the repository.  
-  * allowed\_files: A list of files the agent is permitted to modify.  
-  * test\_command: The shell command to run to verify success (e.g., pytest tests/test\_feature.py).  
-* **Harness Script:** A Python script automates the evaluation process:  
-  1. Reads a task definition file.  
-  2. Uses git checkout to reset the repository to the start\_commit.  
-  3. Invokes the agent system with the task description.  
-  4. Captures the agent's final generated patch.  
-  5. Applies the patch to the codebase.  
-  6. Executes the test\_command.  
+* **Task Definition:** Each evaluation task is defined in a simple format (e.g., a JSON file) that specifies:
+  * task\_id: A unique identifier.
+  * description: The natural language prompt for the agent.
+  * start\_commit: The git commit hash representing the initial state of the repository.
+  * allowed\_files: A list of files the agent is permitted to modify.
+  * test\_command: The shell command to run to verify success (e.g., pytest tests/test\_feature.py).
+* **Harness Script:** A Python script automates the evaluation process:
+  1. Reads a task definition file.
+  2. Uses git checkout to reset the repository to the start\_commit.
+  3. Invokes the agent system with the task description.
+  4. Captures the agent's final generated patch.
+  5. Applies the patch to the codebase.
+  6. Executes the test\_command.
   7. Records the result (pass/fail), along with performance metrics.
 
 #### **8.2 Key Performance Metrics for Coding Agents**
 
 Beyond a simple pass/fail metric, a more nuanced set of KPIs is needed to track agent performance over time 51:
 
-* **Task Success Rate:** The percentage of evaluation tasks where the final generated code passes the verification step. This is the primary measure of correctness.  
-* **Diff Size / Churn:** The number of lines added and removed by the agent's patch. Smaller, more targeted diffs are generally preferable. High churn across multiple attempts on the same task indicates the agent is struggling.  
-* **Number of Turns / Tool Calls:** A measure of efficiency. The total number of LLM calls or tool executions required to reach a solution. A lower number indicates a more direct and efficient reasoning process.  
-* **Token Cost:** The total number of input and output tokens consumed by the agent, which directly translates to API costs.  
+* **Task Success Rate:** The percentage of evaluation tasks where the final generated code passes the verification step. This is the primary measure of correctness.
+* **Diff Size / Churn:** The number of lines added and removed by the agent's patch. Smaller, more targeted diffs are generally preferable. High churn across multiple attempts on the same task indicates the agent is struggling.
+* **Number of Turns / Tool Calls:** A measure of efficiency. The total number of LLM calls or tool executions required to reach a solution. A lower number indicates a more direct and efficient reasoning process.
+* **Token Cost:** The total number of input and output tokens consumed by the agent, which directly translates to API costs.
 * **Human-in-the-Loop (HITL) Interventions:** The number of times a human developer needs to correct the agent's course, refine a prompt, or manually edit the generated code. A decreasing intervention rate is a strong indicator of improving agent autonomy.
 
 #### **8.3 Triage Loops for Failed Tasks**
 
 When an agent fails an evaluation task, a systematic triage process is essential for diagnosis and improvement.
 
-1. **Categorize the Failure:** Use the failure taxonomy from Section 10 to classify the error (e.g., Specification Drift, Context Loss, Tool Error).  
-2. **Analyze the Trace:** Review the agent's execution log. Observability platforms like LangSmith are invaluable for this, as they provide a detailed trace of the agent's internal "thoughts," tool calls, and LLM inputs/outputs.53  
-3. **Identify the Root Cause:** Determine precisely why the failure occurred. Was the initial prompt ambiguous? Did the RAG system retrieve irrelevant context? Did a tool return an unexpected error?  
-4. **Remediate:** Implement a fix. This could involve refining the prompt in prompts.md, improving the chunking strategy in the RAG indexer, or adding better error handling to a custom tool.  
+1. **Categorize the Failure:** Use the failure taxonomy from Section 10 to classify the error (e.g., Specification Drift, Context Loss, Tool Error).
+2. **Analyze the Trace:** Review the agent's execution log. Observability platforms like LangSmith are invaluable for this, as they provide a detailed trace of the agent's internal "thoughts," tool calls, and LLM inputs/outputs.53
+3. **Identify the Root Cause:** Determine precisely why the failure occurred. Was the initial prompt ambiguous? Did the RAG system retrieve irrelevant context? Did a tool return an unexpected error?
+4. **Remediate:** Implement a fix. This could involve refining the prompt in prompts.md, improving the chunking strategy in the RAG indexer, or adding better error handling to a custom tool.
 5. **Add to Regression Suite:** Ensure the failed task is permanently added to the evaluation harness. This prevents future changes from reintroducing the same bug.
 
 ### **Section 9: The Modern AI Developer's Toolbox**
@@ -701,16 +700,16 @@ The landscape of AI developer tools is evolving rapidly. Choosing the right tool
 
 These frameworks are designed for building systems of multiple, collaborating agents that can execute complex tasks with a high degree of autonomy.
 
-* **AutoGen:** A powerful, research-oriented framework from Microsoft that excels at creating complex, dynamic conversations between specialized agents. It is highly flexible and composable, making it suitable for tasks that require emergent, collaborative problem-solving.23  
-* **CrewAI:** A framework that emphasizes a role-based approach to agent collaboration, mirroring a human team structure (e.g., Researcher, Writer, Critic). It is known for its intuitive API and focus on orchestrating well-defined, sequential workflows.24  
+* **AutoGen:** A powerful, research-oriented framework from Microsoft that excels at creating complex, dynamic conversations between specialized agents. It is highly flexible and composable, making it suitable for tasks that require emergent, collaborative problem-solving.23
+* **CrewAI:** A framework that emphasizes a role-based approach to agent collaboration, mirroring a human team structure (e.g., Researcher, Writer, Critic). It is known for its intuitive API and focus on orchestrating well-defined, sequential workflows.24
 * **OpenDevin:** An open-source project aiming to replicate and extend the capabilities of a fully autonomous AI software engineer. It provides a sandboxed environment with a shell, code editor, and browser, allowing an agent to perform a wide range of development tasks end-to-end.59
 
 #### **9.2 IDE Workflows (Human-in-the-Loop Assistants)**
 
 These tools integrate directly into a developer's existing IDE, acting as powerful pair programmers that augment the human workflow rather than fully automating it.
 
-* **Cursor:** An AI-native, fork of VS Code that provides deep integration with the editor. Its key features include codebase-aware chat (@file, @symbol), agentic inline edits (Ctrl+K), and an "Agent" mode that can attempt to complete tasks end-to-end while remaining fully steerable by the developer.60  
-* **Aider:** A command-line-based tool that allows a developer to pair program with an AI in their terminal. It works directly with local git repositories, uses a "repo map" to provide codebase context, and is highly effective for iterative, chat-driven development and refactoring.18  
+* **Cursor:** An AI-native, fork of VS Code that provides deep integration with the editor. Its key features include codebase-aware chat (@file, @symbol), agentic inline edits (Ctrl+K), and an "Agent" mode that can attempt to complete tasks end-to-end while remaining fully steerable by the developer.60
+* **Aider:** A command-line-based tool that allows a developer to pair program with an AI in their terminal. It works directly with local git repositories, uses a "repo map" to provide codebase context, and is highly effective for iterative, chat-driven development and refactoring.18
 * **GitHub Copilot Workspaces:** An agentic development environment that starts from a GitHub issue or PR. It generates a full specification and implementation plan in natural language, which the developer can edit and approve before the tool generates the corresponding code. It is designed for task-level execution rather than line-by-line completion.64
 
 **Table 2: Framework and IDE Comparison Matrix**
@@ -730,35 +729,35 @@ Agentic systems, like any complex software, can fail. Recent research has begun 
 
 #### **10.1 Specification Drift / Goal Misalignment**
 
-* **Symptom:** The agent produces high-quality code that works perfectly but solves the wrong problem or misses a key business requirement.  
-* **Cause:** The initial natural language prompt was ambiguous, incomplete, or misinterpreted by the agent.  
-* **Mitigation:**  
-  * **Prevention:** Enforce the use of the rigorous specification templates from Section 1\. Ensure all acceptance criteria are explicit and verifiable.  
+* **Symptom:** The agent produces high-quality code that works perfectly but solves the wrong problem or misses a key business requirement.
+* **Cause:** The initial natural language prompt was ambiguous, incomplete, or misinterpreted by the agent.
+* **Mitigation:**
+  * **Prevention:** Enforce the use of the rigorous specification templates from Section 1\. Ensure all acceptance criteria are explicit and verifiable.
   * **Detection:** Use a Planner Agent to generate a step-by-step plan and have a human approve it *before* any code is written. This confirms the agent's understanding of the goal.
 
 #### **10.2 Context Loss / Amnesia**
 
-* **Symptom:** In a long-running task, the agent forgets previous instructions, key architectural constraints, or the purpose of a file it wrote earlier. This is a known challenge due to the finite context windows of LLMs.2  
-* **Cause:** The conversational history or relevant file context has exceeded the LLM's context window, or the retrieval mechanism failed to surface the necessary information.  
-* **Mitigation:**  
-  * **Robust RAG:** Implement a high-quality RAG pipeline (Section 5.2). Ensure code is chunked effectively and the embedding model is well-suited for code.  
+* **Symptom:** In a long-running task, the agent forgets previous instructions, key architectural constraints, or the purpose of a file it wrote earlier. This is a known challenge due to the finite context windows of LLMs.2
+* **Cause:** The conversational history or relevant file context has exceeded the LLM's context window, or the retrieval mechanism failed to surface the necessary information.
+* **Mitigation:**
+  * **Robust RAG:** Implement a high-quality RAG pipeline (Section 5.2). Ensure code is chunked effectively and the embedding model is well-suited for code.
   * **Stateful Orchestration:** For very long tasks, break them into smaller, independent sub-tasks. Use a workflow orchestrator (like LangGraph) to manage the overall state and pass only the necessary context to a fresh agent instance for each sub-task.
 
 #### **10.3 File Thrashing / Hallucinated Paths**
 
-* **Symptom:** The agent gets stuck in a loop, repeatedly modifying the same file without making progress. It may also attempt to read from or write to file paths that do not exist.  
-* **Cause:** The agent lacks a correct understanding of the repository's file structure or is failing to converge on a correct solution.  
-* **Mitigation:**  
-  * **Tool Access:** Ensure the agent has access to a listFiles tool and is prompted to use it to verify a path's existence before attempting to read or write.  
-  * **Patch/Diff Workflow:** This prevents the agent from directly damaging the codebase. The developer can simply reject the thrashing diffs.  
+* **Symptom:** The agent gets stuck in a loop, repeatedly modifying the same file without making progress. It may also attempt to read from or write to file paths that do not exist.
+* **Cause:** The agent lacks a correct understanding of the repository's file structure or is failing to converge on a correct solution.
+* **Mitigation:**
+  * **Tool Access:** Ensure the agent has access to a listFiles tool and is prompted to use it to verify a path's existence before attempting to read or write.
+  * **Patch/Diff Workflow:** This prevents the agent from directly damaging the codebase. The developer can simply reject the thrashing diffs.
   * **Filesystem Guardrail:** An automated guardrail (Section 7.5) can block writes to invalid or disallowed paths, forcing the agent to reconsider its action.
 
 #### **10.4 Flaky Tests / Environment Issues**
 
-* **Symptom:** The agent generates a correct code solution, but the final verification step fails due to non-deterministic tests, missing dependencies, or environment configuration drift. This is a known challenge in automated evaluation systems like SWE-bench.48  
-* **Cause:** The execution environment is not consistent or the tests themselves are unreliable.  
-* **Mitigation:**  
-  * **Containerization:** Enforce the use of containerized development environments (e.g., Docker, Devcontainers) for both development and evaluation. This ensures a clean, reproducible environment every time.  
+* **Symptom:** The agent generates a correct code solution, but the final verification step fails due to non-deterministic tests, missing dependencies, or environment configuration drift. This is a known challenge in automated evaluation systems like SWE-bench.48
+* **Cause:** The execution environment is not consistent or the tests themselves are unreliable.
+* **Mitigation:**
+  * **Containerization:** Enforce the use of containerized development environments (e.g., Docker, Devcontainers) for both development and evaluation. This ensures a clean, reproducible environment every time.
   * **Test Design:** Prompt the agent to write deterministic, mock-based unit tests that do not rely on external services or random data.
 
 **Table 3: Failure Mode Mitigation Cheat Sheet**
@@ -773,43 +772,43 @@ Agentic systems, like any complex software, can fail. Recent research has begun 
 
 #### **Works cited**
 
-1. LLM-driven Development: Beyond the Hype and Into the Production Workflow, accessed August 20, 2025, [https://optimumpartners.com/insight/llm-driven-development-beyond-the-hype-and-into-the-production-workflow/](https://optimumpartners.com/insight/llm-driven-development-beyond-the-hype-and-into-the-production-workflow/)  
-2. LLM Agents \- Prompt Engineering Guide, accessed August 20, 2025, [https://www.promptingguide.ai/research/llm-agents](https://www.promptingguide.ai/research/llm-agents)  
-3. Why Do Multi-Agent LLM Systems Fail? \- arXiv, accessed August 20, 2025, [https://arxiv.org/pdf/2503.13657?](https://arxiv.org/pdf/2503.13657)  
-4. Guide to Specification-First AI Development | Galileo, accessed August 20, 2025, [https://galileo.ai/blog/specification-first-ai-development](https://galileo.ai/blog/specification-first-ai-development)  
-5. Doc Driven Development, accessed August 20, 2025, [https://docdd.ai/](https://docdd.ai/)  
-6. Documentation-Driven Development: How Good Docs Become Your AI Pair Programming Superpower | by Hiraq Citra M | lifefunk | Jul, 2025 | Medium, accessed August 20, 2025, [https://medium.com/lifefunk/documentation-driven-development-how-good-docs-become-your-ai-pair-programming-superpower-e0e574db2f3b](https://medium.com/lifefunk/documentation-driven-development-how-good-docs-become-your-ai-pair-programming-superpower-e0e574db2f3b)  
-7. Using LLMs for Code Generation: A Guide to Improving Accuracy and Addressing Common Issues \- PromptHub, accessed August 20, 2025, [https://www.prompthub.us/blog/using-llms-for-code-generation-a-guide-to-improving-accuracy-and-addressing-common-issues](https://www.prompthub.us/blog/using-llms-for-code-generation-a-guide-to-improving-accuracy-and-addressing-common-issues)  
-8. Code Generation with LLMs: Practical Challenges, Gotchas, and Nuances \- Medium, accessed August 20, 2025, [https://medium.com/@adnanmasood/code-generation-with-llms-practical-challenges-gotchas-and-nuances-7b51d394f588](https://medium.com/@adnanmasood/code-generation-with-llms-practical-challenges-gotchas-and-nuances-7b51d394f588)  
-9. Requirements are All You Need: From Requirements to Code with LLMs \- arXiv, accessed August 20, 2025, [https://arxiv.org/html/2406.10101v1](https://arxiv.org/html/2406.10101v1)  
-10. LLM-based Test-driven Interactive Code Generation: User Study and Empirical Evaluation \- Penn Engineering, accessed August 20, 2025, [https://www.seas.upenn.edu/\~asnaik/assets/papers/tse24\_ticoder.pdf](https://www.seas.upenn.edu/~asnaik/assets/papers/tse24_ticoder.pdf)  
-11. LLMs for Code Generation: A summary of the research on quality \- Sonar, accessed August 20, 2025, [https://www.sonarsource.com/learn/llm-code-generation/](https://www.sonarsource.com/learn/llm-code-generation/)  
-12. Repository map \- Aider, accessed August 20, 2025, [https://aider.chat/docs/repomap.html](https://aider.chat/docs/repomap.html)  
-13. Specifying coding conventions | aider, accessed August 20, 2025, [https://aider.chat/docs/usage/conventions.html](https://aider.chat/docs/usage/conventions.html)  
-14. Tips | aider, accessed August 20, 2025, [https://aider.chat/docs/usage/tips.html](https://aider.chat/docs/usage/tips.html)  
-15. Introduction to AutoGen | AutoGen 0.2 \- Microsoft Open Source, accessed August 20, 2025, [https://microsoft.github.io/autogen/0.2/docs/tutorial/introduction/](https://microsoft.github.io/autogen/0.2/docs/tutorial/introduction/)  
-16. Introduction \- CrewAI, accessed August 20, 2025, [https://docs.crewai.com/](https://docs.crewai.com/)  
-17. Build a RAG system for your codebase in 5 easy steps | by Karl Weinmeister | Google Cloud, accessed August 20, 2025, [https://medium.com/google-cloud/build-a-rag-system-for-your-codebase-in-5-easy-steps-a3506c10599b](https://medium.com/google-cloud/build-a-rag-system-for-your-codebase-in-5-easy-steps-a3506c10599b)  
-18. Step by step approach to RAG my Codebase | by Osman Mehmood \- Medium, accessed August 20, 2025, [https://medium.com/@osman.mehmood2/step-by-step-approach-to-rag-my-codebase-6ed41ff58de8](https://medium.com/@osman.mehmood2/step-by-step-approach-to-rag-my-codebase-6ed41ff58de8)  
-19. MikeyBeez/codemapper: Python module that creates a ... \- GitHub, accessed August 20, 2025, [https://github.com/MikeyBeez/codemapper](https://github.com/MikeyBeez/codemapper)  
-20. Retrieval Augmented Generation (RAG) from Scratch — Tutorial For Dummies, accessed August 20, 2025, [https://dev.to/zachary62/retrieval-augmented-generation-rag-from-scratch-tutorial-for-dummies-508a](https://dev.to/zachary62/retrieval-augmented-generation-rag-from-scratch-tutorial-for-dummies-508a)  
-21. Claude SWE-Bench Performance \\ Anthropic, accessed August 20, 2025, [https://www.anthropic.com/research/swe-bench-sonnet](https://www.anthropic.com/research/swe-bench-sonnet)  
-22. SWE-Bench-C Evaluation Framework \- Design And Reuse, accessed August 20, 2025, [https://www.design-reuse.com/article/61613-swe-bench-c-evaluation-framework/](https://www.design-reuse.com/article/61613-swe-bench-c-evaluation-framework/)  
-23. Multi-SWE-bench: A Multilingual Benchmark for Issue ... \- GitHub, accessed August 20, 2025, [https://github.com/multi-swe-bench/multi-swe-bench](https://github.com/multi-swe-bench/multi-swe-bench)  
-24. LLM Evaluation Metrics: The Ultimate LLM Evaluation Guide \- Confident AI, accessed August 20, 2025, [https://www.confident-ai.com/blog/llm-evaluation-metrics-everything-you-need-for-llm-evaluation](https://www.confident-ai.com/blog/llm-evaluation-metrics-everything-you-need-for-llm-evaluation)  
-25. How quality, cost, and latency are assessed by Agent Evaluation (MLflow 2), accessed August 20, 2025, [https://docs.databricks.com/aws/en/generative-ai/agent-evaluation/llm-judge-metrics](https://docs.databricks.com/aws/en/generative-ai/agent-evaluation/llm-judge-metrics)  
-26. LangChain, accessed August 20, 2025, [https://www.langchain.com/](https://www.langchain.com/)  
-27. Build an Agent \- ️ LangChain, accessed August 20, 2025, [https://python.langchain.com/docs/tutorials/agents/](https://python.langchain.com/docs/tutorials/agents/)  
-28. Getting Started | AutoGen 0.2 \- Microsoft Open Source, accessed August 20, 2025, [https://microsoft.github.io/autogen/0.2/docs/Getting-Started/](https://microsoft.github.io/autogen/0.2/docs/Getting-Started/)  
-29. AutoGen vs. LangGraph vs. CrewAI:Who Wins? | by Khushbu Shah ..., accessed August 20, 2025, [https://medium.com/projectpro/autogen-vs-langgraph-vs-crewai-who-wins-02e6cc7c5cb8](https://medium.com/projectpro/autogen-vs-langgraph-vs-crewai-who-wins-02e6cc7c5cb8)  
-30. Open source \- CrewAI, accessed August 20, 2025, [https://www.crewai.com/open-source](https://www.crewai.com/open-source)  
-31. Comparing AI Agent Frameworks: Which One Should I Choose for My Project? \- langgraph, accessed August 20, 2025, [https://community.latenode.com/t/comparing-ai-agent-frameworks-which-one-should-i-choose-for-my-project/31007](https://community.latenode.com/t/comparing-ai-agent-frameworks-which-one-should-i-choose-for-my-project/31007)  
-32. OpenDevin \- AI Agent Store, accessed August 20, 2025, [https://aiagentstore.ai/ai-agent/opendevin](https://aiagentstore.ai/ai-agent/opendevin)  
-33. Top Features of Cursor AI \- APPWRK, accessed August 20, 2025, [https://appwrk.com/cursor-ai-features](https://appwrk.com/cursor-ai-features)  
-34. Features | Cursor \- The AI Code Editor, accessed August 20, 2025, [https://cursor.com/features](https://cursor.com/features)  
-35. Claude, Cursor, Aider, Cline, Copilot: Which Is the Best One? | by Edwin Lisowski \- Medium, accessed August 20, 2025, [https://medium.com/@elisowski/claude-cursor-aider-cline-copilot-which-is-the-best-one-ef1a47eaa1e6](https://medium.com/@elisowski/claude-cursor-aider-cline-copilot-which-is-the-best-one-ef1a47eaa1e6)  
-36. Tutorial videos \- Aider, accessed August 20, 2025, [https://aider.chat/docs/usage/tutorials.html](https://aider.chat/docs/usage/tutorials.html)  
-37. Copilot Workspace \- GitHub Next, accessed August 20, 2025, [https://githubnext.com/projects/copilot-workspace](https://githubnext.com/projects/copilot-workspace)  
-38. GitHub Copilot · Your AI pair programmer, accessed August 20, 2025, [https://github.com/features/copilot](https://github.com/features/copilot)  
-39. How to be more productive with Github Copilot Workspace \- YouTube, accessed August 20, 2025, [https://www.youtube.com/watch?v=sjAMkdYnbIw](https://www.youtube.com/watch?v=sjAMkdYnbIw)  
+1. LLM-driven Development: Beyond the Hype and Into the Production Workflow, accessed August 20, 2025, [https://optimumpartners.com/insight/llm-driven-development-beyond-the-hype-and-into-the-production-workflow/](https://optimumpartners.com/insight/llm-driven-development-beyond-the-hype-and-into-the-production-workflow/)
+2. LLM Agents \- Prompt Engineering Guide, accessed August 20, 2025, [https://www.promptingguide.ai/research/llm-agents](https://www.promptingguide.ai/research/llm-agents)
+3. Why Do Multi-Agent LLM Systems Fail? \- arXiv, accessed August 20, 2025, [https://arxiv.org/pdf/2503.13657?](https://arxiv.org/pdf/2503.13657)
+4. Guide to Specification-First AI Development | Galileo, accessed August 20, 2025, [https://galileo.ai/blog/specification-first-ai-development](https://galileo.ai/blog/specification-first-ai-development)
+5. Doc Driven Development, accessed August 20, 2025, [https://docdd.ai/](https://docdd.ai/)
+6. Documentation-Driven Development: How Good Docs Become Your AI Pair Programming Superpower | by Hiraq Citra M | lifefunk | Jul, 2025 | Medium, accessed August 20, 2025, [https://medium.com/lifefunk/documentation-driven-development-how-good-docs-become-your-ai-pair-programming-superpower-e0e574db2f3b](https://medium.com/lifefunk/documentation-driven-development-how-good-docs-become-your-ai-pair-programming-superpower-e0e574db2f3b)
+7. Using LLMs for Code Generation: A Guide to Improving Accuracy and Addressing Common Issues \- PromptHub, accessed August 20, 2025, [https://www.prompthub.us/blog/using-llms-for-code-generation-a-guide-to-improving-accuracy-and-addressing-common-issues](https://www.prompthub.us/blog/using-llms-for-code-generation-a-guide-to-improving-accuracy-and-addressing-common-issues)
+8. Code Generation with LLMs: Practical Challenges, Gotchas, and Nuances \- Medium, accessed August 20, 2025, [https://medium.com/@adnanmasood/code-generation-with-llms-practical-challenges-gotchas-and-nuances-7b51d394f588](https://medium.com/@adnanmasood/code-generation-with-llms-practical-challenges-gotchas-and-nuances-7b51d394f588)
+9. Requirements are All You Need: From Requirements to Code with LLMs \- arXiv, accessed August 20, 2025, [https://arxiv.org/html/2406.10101v1](https://arxiv.org/html/2406.10101v1)
+10. LLM-based Test-driven Interactive Code Generation: User Study and Empirical Evaluation \- Penn Engineering, accessed August 20, 2025, [https://www.seas.upenn.edu/\~asnaik/assets/papers/tse24\_ticoder.pdf](https://www.seas.upenn.edu/~asnaik/assets/papers/tse24_ticoder.pdf)
+11. LLMs for Code Generation: A summary of the research on quality \- Sonar, accessed August 20, 2025, [https://www.sonarsource.com/learn/llm-code-generation/](https://www.sonarsource.com/learn/llm-code-generation/)
+12. Repository map \- Aider, accessed August 20, 2025, [https://aider.chat/docs/repomap.html](https://aider.chat/docs/repomap.html)
+13. Specifying coding conventions | aider, accessed August 20, 2025, [https://aider.chat/docs/usage/conventions.html](https://aider.chat/docs/usage/conventions.html)
+14. Tips | aider, accessed August 20, 2025, [https://aider.chat/docs/usage/tips.html](https://aider.chat/docs/usage/tips.html)
+15. Introduction to AutoGen | AutoGen 0.2 \- Microsoft Open Source, accessed August 20, 2025, [https://microsoft.github.io/autogen/0.2/docs/tutorial/introduction/](https://microsoft.github.io/autogen/0.2/docs/tutorial/introduction/)
+16. Introduction \- CrewAI, accessed August 20, 2025, [https://docs.crewai.com/](https://docs.crewai.com/)
+17. Build a RAG system for your codebase in 5 easy steps | by Karl Weinmeister | Google Cloud, accessed August 20, 2025, [https://medium.com/google-cloud/build-a-rag-system-for-your-codebase-in-5-easy-steps-a3506c10599b](https://medium.com/google-cloud/build-a-rag-system-for-your-codebase-in-5-easy-steps-a3506c10599b)
+18. Step by step approach to RAG my Codebase | by Osman Mehmood \- Medium, accessed August 20, 2025, [https://medium.com/@osman.mehmood2/step-by-step-approach-to-rag-my-codebase-6ed41ff58de8](https://medium.com/@osman.mehmood2/step-by-step-approach-to-rag-my-codebase-6ed41ff58de8)
+19. MikeyBeez/codemapper: Python module that creates a ... \- GitHub, accessed August 20, 2025, [https://github.com/MikeyBeez/codemapper](https://github.com/MikeyBeez/codemapper)
+20. Retrieval Augmented Generation (RAG) from Scratch — Tutorial For Dummies, accessed August 20, 2025, [https://dev.to/zachary62/retrieval-augmented-generation-rag-from-scratch-tutorial-for-dummies-508a](https://dev.to/zachary62/retrieval-augmented-generation-rag-from-scratch-tutorial-for-dummies-508a)
+21. Claude SWE-Bench Performance \\ Anthropic, accessed August 20, 2025, [https://www.anthropic.com/research/swe-bench-sonnet](https://www.anthropic.com/research/swe-bench-sonnet)
+22. SWE-Bench-C Evaluation Framework \- Design And Reuse, accessed August 20, 2025, [https://www.design-reuse.com/article/61613-swe-bench-c-evaluation-framework/](https://www.design-reuse.com/article/61613-swe-bench-c-evaluation-framework/)
+23. Multi-SWE-bench: A Multilingual Benchmark for Issue ... \- GitHub, accessed August 20, 2025, [https://github.com/multi-swe-bench/multi-swe-bench](https://github.com/multi-swe-bench/multi-swe-bench)
+24. LLM Evaluation Metrics: The Ultimate LLM Evaluation Guide \- Confident AI, accessed August 20, 2025, [https://www.confident-ai.com/blog/llm-evaluation-metrics-everything-you-need-for-llm-evaluation](https://www.confident-ai.com/blog/llm-evaluation-metrics-everything-you-need-for-llm-evaluation)
+25. How quality, cost, and latency are assessed by Agent Evaluation (MLflow 2), accessed August 20, 2025, [https://docs.databricks.com/aws/en/generative-ai/agent-evaluation/llm-judge-metrics](https://docs.databricks.com/aws/en/generative-ai/agent-evaluation/llm-judge-metrics)
+26. LangChain, accessed August 20, 2025, [https://www.langchain.com/](https://www.langchain.com/)
+27. Build an Agent \- ️ LangChain, accessed August 20, 2025, [https://python.langchain.com/docs/tutorials/agents/](https://python.langchain.com/docs/tutorials/agents/)
+28. Getting Started | AutoGen 0.2 \- Microsoft Open Source, accessed August 20, 2025, [https://microsoft.github.io/autogen/0.2/docs/Getting-Started/](https://microsoft.github.io/autogen/0.2/docs/Getting-Started/)
+29. AutoGen vs. LangGraph vs. CrewAI:Who Wins? | by Khushbu Shah ..., accessed August 20, 2025, [https://medium.com/projectpro/autogen-vs-langgraph-vs-crewai-who-wins-02e6cc7c5cb8](https://medium.com/projectpro/autogen-vs-langgraph-vs-crewai-who-wins-02e6cc7c5cb8)
+30. Open source \- CrewAI, accessed August 20, 2025, [https://www.crewai.com/open-source](https://www.crewai.com/open-source)
+31. Comparing AI Agent Frameworks: Which One Should I Choose for My Project? \- langgraph, accessed August 20, 2025, [https://community.latenode.com/t/comparing-ai-agent-frameworks-which-one-should-i-choose-for-my-project/31007](https://community.latenode.com/t/comparing-ai-agent-frameworks-which-one-should-i-choose-for-my-project/31007)
+32. OpenDevin \- AI Agent Store, accessed August 20, 2025, [https://aiagentstore.ai/ai-agent/opendevin](https://aiagentstore.ai/ai-agent/opendevin)
+33. Top Features of Cursor AI \- APPWRK, accessed August 20, 2025, [https://appwrk.com/cursor-ai-features](https://appwrk.com/cursor-ai-features)
+34. Features | Cursor \- The AI Code Editor, accessed August 20, 2025, [https://cursor.com/features](https://cursor.com/features)
+35. Claude, Cursor, Aider, Cline, Copilot: Which Is the Best One? | by Edwin Lisowski \- Medium, accessed August 20, 2025, [https://medium.com/@elisowski/claude-cursor-aider-cline-copilot-which-is-the-best-one-ef1a47eaa1e6](https://medium.com/@elisowski/claude-cursor-aider-cline-copilot-which-is-the-best-one-ef1a47eaa1e6)
+36. Tutorial videos \- Aider, accessed August 20, 2025, [https://aider.chat/docs/usage/tutorials.html](https://aider.chat/docs/usage/tutorials.html)
+37. Copilot Workspace \- GitHub Next, accessed August 20, 2025, [https://githubnext.com/projects/copilot-workspace](https://githubnext.com/projects/copilot-workspace)
+38. GitHub Copilot · Your AI pair programmer, accessed August 20, 2025, [https://github.com/features/copilot](https://github.com/features/copilot)
+39. How to be more productive with Github Copilot Workspace \- YouTube, accessed August 20, 2025, [https://www.youtube.com/watch?v=sjAMkdYnbIw](https://www.youtube.com/watch?v=sjAMkdYnbIw)
 40. Taxonomy of Failure Mode in Agentic AI Systems \- Microsoft, accessed August 20, 2025, [https://cdn-dynmedia-1.microsoft.com/is/content/microsoftcorp/microsoft/final/en-us/microsoft-brand/documents/Taxonomy-of-Failure-Mode-in-Agentic-AI-Systems-Whitepaper.pdf](https://cdn-dynmedia-1.microsoft.com/is/content/microsoftcorp/microsoft/final/en-us/microsoft-brand/documents/Taxonomy-of-Failure-Mode-in-Agentic-AI-Systems-Whitepaper.pdf)
